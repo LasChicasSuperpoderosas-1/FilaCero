@@ -14,7 +14,7 @@ struct LoginView: View {
     @State private var colorBoton : Color = Color(red: 211/255, green: 211/255, blue: 211/255)
     
     var body: some View {
-        VStack(){
+        VStack{
             Image("LogoNova")
                 .resizable(resizingMode: .stretch)
                 .aspectRatio(contentMode: .fit)
@@ -52,7 +52,7 @@ struct LoginView: View {
                 .font(.system(size: 20))
                 .padding(.leading, -180)
             
-            TextField("Ingresa tu contraseña", text: $password)
+            SecureField("Ingresa tu contraseña", text: $password)
                 .padding(.vertical, 12)
                 .padding(.horizontal, 22)
                 .overlay(
@@ -63,12 +63,16 @@ struct LoginView: View {
                 .padding(.bottom, 10)
                 .frame(width: 360)
             
+            
             Button("Olvidé mi contraseña") {
                 email = "JAJAJA no sabe su contraseña"
             }.padding(.leading, -180)
                 .tint(Color(red: 1/255, green: 104/255, blue: 138/255))
             
             Button("Iniciar Sesión") {
+                if email.contains("@") && !email.isEmpty{
+                    // Se pasa al inicio
+                }
                 
             }.frame(width: 170, height: 45)
                 .background(

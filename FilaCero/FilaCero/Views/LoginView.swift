@@ -12,6 +12,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var colorBoton : Color = Color(red: 211/255, green: 211/255, blue: 211/255)
+    @State private var showMain = false
     
     var body: some View {
         VStack{
@@ -70,10 +71,11 @@ struct LoginView: View {
                 .tint(Color(red: 1/255, green: 104/255, blue: 138/255))
             
             Button("Iniciar Sesión") {
-                if email.contains("@") && !email.isEmpty{
+              
+              showMain = true
+               if email.contains("@") && !email.isEmpty{
                     // Se pasa al inicio
                 }
-                
             }.frame(width: 170, height: 45)
                 .background(
                     (email.isEmpty || password.isEmpty) ? Color(red: 211/255, green: 211/255, blue: 211/255) : Color(red: 1/255, green: 104/255, blue: 138/255)
@@ -86,7 +88,14 @@ struct LoginView: View {
                 .padding(.top, 50)
                 .disabled(email.isEmpty || password.isEmpty)
                 
-        }//.background(Color(red: 242/255, green: 242/255, blue: 242/255).opacity(0.5))
+        }        .fullScreenCover(isPresented: $showMain) {
+            // Puedes tener NavigationStack aquí dentro si tu “main” navega
+            NavigationStack {
+                InicioView()
+            }
+            
+        }
+        //.background(Color(red: 242/255, green: 242/255, blue: 242/255).opacity(0.5))
     
     }//HEX: #F2F2F2
 }

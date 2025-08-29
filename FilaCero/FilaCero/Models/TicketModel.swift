@@ -16,5 +16,6 @@ struct Ticket : Identifiable {
     public var horaActual: String
     public var pantallaAnuncioSuperior: String
     public var pantallaVentanilla: Int
-    public var tiempoLimite: String
+    public var turnoActivo: Bool
+    public var tiempoRestanteTurno: Int
 }

@@ -148,9 +148,9 @@ struct InicioView: View {
             .buttonStyle(.borderedProminent)
             .tint(Brand.primary)
             .padding(.bottom, 8)
-            .fullScreenCover(isPresented: $showTicket){
-                TicketView(signingOutTicket: $showTicket)
-            }
+            //.fullScreenCover(isPresented: $showTicket){
+             //   TicketView(signingOutTicket: $showTicket)
+            //}
             
             Spacer()
 

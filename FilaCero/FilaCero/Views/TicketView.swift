@@ -16,10 +16,14 @@ struct TicketView: View {
     private var pantallaAnuncioSuperior: String = "Es Su turno!"
     private var pantallaVentanilla: Int = 4
     private var tiempoLimite: String = "5:00"
+    private var turnoActivo: Bool = true
+    
+    
+    
     
     let darkBlue: Color = Color(hue: 217/360, saturation: 83/100, brightness: 75/100)
     let darkRed: Color = Color(red: 196/255, green: 41/255, blue: 41/255)
-    
+    let offBlue: Color = Color(red: 88/255, green: 116/255, blue: 147/255)
     
     
     var body: some View {
@@ -77,60 +81,121 @@ struct TicketView: View {
                     }//<-- HSTACK HORA REGISTRO
                 }// <-- VSTACK PACIENTE Y HORA REGISTRO
                 
-                VStack{
-                    HStack{
-                        Image(systemName: "arrow.right")
-                            .aspectRatio(contentMode: .fill)
-                            .bold()
-                        Text("¡ES SU TURNO!")
-                            .bold()
-                            .font(.system(size: 30))
-                            
-                        
-                    }// <-- HSTACK MINI NOTIFICACION
-                    .foregroundStyle(.blue)
-                    
-                    Text("Dirigase a ")
-                    Text("VENTANILLA \(pantallaVentanilla)")
-                        .font(.system(size:30))
-                        .fontWeight(.bold)
-                        .foregroundStyle(darkBlue)
+                
+    
+                if (turnoActivo){
                     VStack{
                         HStack{
-                            Image(systemName: "clock")
-                                .fontWeight(.bold)
+                            Image(systemName: "arrow.right")
                                 .aspectRatio(contentMode: .fill)
-                            Text("TIEMPO LÍMITE")
-                                .fontWeight(.bold)
+                                .bold()
+                                .font(.system(size: 30))
+                            Text("¡ES SU TURNO!")
+                                .bold()
+                                .font(.system(size: 30))
                                 
                             
-                        }// <-- HSTACK LOGO + ANUNCIO TIEMPO LIMITE
+                        }// <-- HSTACK MINI NOTIFICACION
+                        .foregroundStyle(.blue)
                         
-                        Text(tiempoLimite)
+                        Text("Dirigase a ")
+                        Text("VENTANILLA \(pantallaVentanilla)")
+                            .font(.system(size:30))
                             .fontWeight(.bold)
-                            .monospaced()
-                            .offset(y:10)
-                            .font(.system(size: 30))
+                            .foregroundStyle(darkBlue)
+                        VStack{
+                            HStack{
+                                Image(systemName: "clock")
+                                    .fontWeight(.bold)
+                                    .aspectRatio(contentMode: .fill)
+                                Text("TIEMPO LÍMITE")
+                                    .fontWeight(.bold)
+                                    
+                                
+                            }// <-- HSTACK LOGO + ANUNCIO TIEMPO LIMITE
+                            
+                            Text(tiempoLimite)
+                                .fontWeight(.bold)
+                                .monospaced()
+                                .offset(y:10)
+                                .font(.system(size: 30))
+                            
+                        }// <-- VSTACK TIEMPO LIMITE
+                        .padding(30)
+                        .background(Color(red: 255/255, green: 189/255, blue: 173/255))
+                        .cornerRadius(15)
+                        .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(.red, lineWidth: 1)
+                            )
+                        .foregroundStyle(darkRed)
                         
-                    }// <-- VSTACK TIEMPO LIMITE
-                    .padding(30)
-                    .background(Color(red: 255/255, green: 189/255, blue: 173/255))
-                    .cornerRadius(15)
+                    } //<-- VSTACK PANTALLA DINAMICA
+                    .padding(20)
+                    .frame(width: 300,height:275)
+                    .background(Color(red: 173/255, green: 208/255, blue: 255/255))
+                    .cornerRadius(20)
                     .overlay(
                             RoundedRectangle(cornerRadius: 16)
-                                .stroke(.red, lineWidth: 1)
+                                .stroke(.blue, lineWidth: 1)
                         )
-                    .foregroundStyle(darkRed)
-                    
-                } //<-- VSTACK PANTALLA DINAMICA
-                .padding(20)
-                .frame(width: 300)
-                .background(Color(red: 173/255, green: 208/255, blue: 255/255))
-                .cornerRadius(20)
-                .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(.blue, lineWidth: 1)
-                    )
+                } else {
+                    VStack{
+                        VStack{
+                            Image(systemName: "person.badge.clock.fill")
+                                .aspectRatio(contentMode: .fill)
+                                .bold()
+                                .font(.system(size: 70))
+                                .foregroundStyle(offBlue)
+                                
+                            
+                        }// <-- HSTACK MINI NOTIFICACION
+                        .foregroundStyle(.blue)
+                        
+        
+                        Text("ESPERE SU VENTANILLA")
+                            .font(.system(size:20))
+                            .fontWeight(.bold)
+                            .foregroundStyle(offBlue)
+                        VStack{
+                            HStack{
+                                Image(systemName: "clock")
+                                    .fontWeight(.bold)
+                                    .aspectRatio(contentMode: .fill)
+                                Text("TIEMPO LÍMITE")
+                                    .fontWeight(.bold)
+                                    
+                                
+                            }// <-- HSTACK LOGO + ANUNCIO TIEMPO LIMITE
+                            
+                            Text(tiempoLimite)
+                                .fontWeight(.bold)
+                                .monospaced()
+                                .offset(y:10)
+                                .font(.system(size: 30))
+                                
+                            
+                        }// <-- VSTACK TIEMPO LIMITE
+                        .padding(30)
+                        .background(offBlue)
+                        .cornerRadius(15)
+                        .overlay(
+                                RoundedRectangle(cornerRadius: 16)
+                                    .stroke(.black, lineWidth: 1)
+                            )
+                        .foregroundStyle(Color(red:215/255,green:215/255,blue:215/255))
+                    } //<-- VSTACK PANTALLA DINAMICA
+                    .padding(20)
+                    .frame(width: 300,height:275)
+                    .background(Color(red: 165/255, green: 195/255, blue: 226/255))
+                    .cornerRadius(20)
+                    .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(offBlue, lineWidth: 1)
+                        )
+                }
+                
+                
                 
                 
                 ZStack{

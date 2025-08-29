@@ -16,6 +16,7 @@ struct TicketView: View {
    let darkRed: Color = Color(red: 196/255, green: 41/255, blue: 41/255)
    let offBlue: Color = Color(red: 88/255, green: 116/255, blue: 147/255)
    
+    @Binding public var showTicket: Bool
    
    var body: some View {
        ZStack{
@@ -204,7 +205,7 @@ struct TicketView: View {
                }//<--ZSTACK PARA BORDE
                
                Button("CANCELAR TURNO"){
-                   print("Imma clicked")
+                   showTicket = false
                }
                    .padding(4)
                    .foregroundStyle(Color(red: 220/255, green: 41/255, blue: 41/255))
@@ -224,4 +225,19 @@ struct TicketView: View {
            
        }// <-- ZSTACK PARA LA IMAGEN DE FONDO
    }
+}
+
+#Preview {
+    TicketView( data: Ticket(
+                           fecha: "27/08/2025",
+                           numeroDeTurno: 12,
+                           nombrePaciente: "Federico Jimenez",
+                           horaRegistro: "19:30:30",
+                           horaActual: "19:46:23",
+                           pantallaAnuncioSuperior: "Es Su turno!",
+                           pantallaVentanilla: 4,
+                           turnoActivo: true,
+                           tiempoRestanteTurno: 180),
+                showTicket: .constant(false),
+    )
 }

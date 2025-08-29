@@ -23,10 +23,12 @@ struct TicketAnimationView: View {
         tiempoRestanteTurno: 180
         )
 
+    @Binding public var showTicket: Bool
+    
     var body: some View {
         VStack{
             
-            TicketView(data: ticket)
+            TicketView(data: ticket, showTicket: $showTicket)
                 .frame(width: 400)
                 .offset(y: posicionInicial)
                 .onAppear {
@@ -73,5 +75,5 @@ struct TicketAnimationView: View {
 }
 
 #Preview {
-    TicketAnimationView()
+    TicketAnimationView(showTicket: .constant(false))
 }

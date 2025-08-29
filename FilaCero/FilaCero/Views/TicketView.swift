@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct TicketView: View {
-    private var fecha: String = "27/08/2025"
-    private var numeroDeTurno: Int = 1
-    private var nombrePaciente: String = "Federico Jimenez"
-    private var horaRegistro: String = "19:30:30"
-    private var horaActual: String = "19:46:23"
-    private var pantallaAnuncioSuperior: String = "Es Su turno!"
-    private var pantallaVentanilla: Int = 4
-    private var tiempoLimite: String = "5:00"
+     var fecha: String = "27/08/2025"
+     var numeroDeTurno: Int = 1
+     var nombrePaciente: String = "Federico Jimenez"
+     var horaRegistro: String = "19:30:30"
+     var horaActual: String = "19:46:23"
+     var pantallaAnuncioSuperior: String = "Es Su turno!"
+     var pantallaVentanilla: Int = 4
+     var tiempoLimite: String = "5:00"
     
     let darkBlue: Color = Color(hue: 217/360, saturation: 83/100, brightness: 75/100)
     let darkRed: Color = Color(red: 196/255, green: 41/255, blue: 41/255)
     
+    @Binding public var signingOutTicket: Bool 
     
     
     var body: some View {
@@ -148,7 +149,7 @@ struct TicketView: View {
                 }//<--ZSTACK PARA BORDE
                 
                 Button("CANCELAR TURNO"){
-                    print("Imma clicked")
+                    signingOutTicket = false
                 }
                     .padding(4)
                     .foregroundStyle(Color(red: 220/255, green: 41/255, blue: 41/255))
@@ -171,5 +172,5 @@ struct TicketView: View {
 }
 
 #Preview {
-    TicketView()
+    TicketView(signingOutTicket: .constant(false))
 }

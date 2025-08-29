@@ -12,7 +12,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var colorBoton : Color = Color(red: 211/255, green: 211/255, blue: 211/255)
-    @State private var showMain = false
+    @State public var showMain = false
     
     var body: some View {
         VStack{
@@ -20,7 +20,6 @@ struct LoginView: View {
                 .resizable(resizingMode: .stretch)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 212)
-            
             Text("Gestión de turnos")
                 .foregroundStyle(Color(red:102/255, green: 102/255, blue: 102/255)) //Hex: #666666
                 .bold()
@@ -33,7 +32,6 @@ struct LoginView: View {
                 .bold()
                 .font(.system(size: 20))
                 .padding(.leading, -180)
-            
             TextField("Ejemplo@ternium", text: $email)
                 .padding(.vertical, 12)
                 .padding(.horizontal, 22)
@@ -52,7 +50,6 @@ struct LoginView: View {
                 .bold()
                 .font(.system(size: 20))
                 .padding(.leading, -180)
-            
             SecureField("Ingresa tu contraseña", text: $password)
                 .padding(.vertical, 12)
                 .padding(.horizontal, 22)
@@ -71,10 +68,9 @@ struct LoginView: View {
                 .tint(Color(red: 1/255, green: 104/255, blue: 138/255))
             
             Button("Iniciar Sesión") {
-              
-              showMain = true
                if email.contains("@") && !email.isEmpty{
                     // Se pasa al inicio
+                   showMain = true
                 }
             }.frame(width: 170, height: 45)
                 .background(
@@ -91,7 +87,7 @@ struct LoginView: View {
         }        .fullScreenCover(isPresented: $showMain) {
             // Puedes tener NavigationStack aquí dentro si tu “main” navega
             NavigationStack {
-                InicioView()
+                InicioView(isSignedIn:$showMain)
             }
             
         }

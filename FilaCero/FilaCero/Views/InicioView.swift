@@ -22,6 +22,9 @@ struct InicioView: View {
     var patientName: String = "Pablo Emilio González"
 
     @State private var appeared = false
+    @State public var showTicket = false // Variable para cambiar al ticket
+    @Binding public var isSignedIn: Bool // Variable de Binding con showMain
+    
 
     var body: some View {
         VStack() {
@@ -134,7 +137,9 @@ struct InicioView: View {
             Spacer()
 
 
-            Button(action: onGenerateTurn) {
+            Button(action: {
+                showTicket = true // Variable para el fullscreencover
+            }) {
                 Text("Generar Turno")
                     .font(.system(size:35, weight: .bold))
                     .frame(maxWidth: .infinity)
@@ -143,10 +148,15 @@ struct InicioView: View {
             .buttonStyle(.borderedProminent)
             .tint(Brand.primary)
             .padding(.bottom, 8)
+            .fullScreenCover(isPresented: $showTicket){
+                TicketView(signingOutTicket: $showTicket)
+            }
             
             Spacer()
 
-            Button(action: onSignOut) {
+            Button(action: {
+                isSignedIn = false // Variable para regresar al login con el showMain
+            }) {
                 HStack(spacing: 6) {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                         .imageScale(.medium)
@@ -178,5 +188,6 @@ struct InicioView: View {
     InicioView(
         onGenerateTurn: { print("Preview: turno generado") },
         onSignOut: { print("Preview: cerrar sesión") },
+        isSignedIn: .constant(false), // Aqui pasa el binding
     )
 }

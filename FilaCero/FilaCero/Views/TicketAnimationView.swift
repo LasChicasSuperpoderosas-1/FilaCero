@@ -13,13 +13,14 @@ struct TicketAnimationView: View {
     
     @State private var ticket = Ticket(
         fecha :"27/08/2025",
-        numeroDeTurno : 1,
+        numeroDeTurno : Int.random(in: 1...999),
         nombrePaciente: "Federico Jimenez",
         horaRegistro: "19:30:30",
         horaActual:  "19:46:23",
         pantallaAnuncioSuperior: "Es Su turno!",
         pantallaVentanilla: 4,
-        tiempoLimite: "5:00",
+        turnoActivo: false,
+        tiempoRestanteTurno: 180
         )
 
     var body: some View {
@@ -32,9 +33,13 @@ struct TicketAnimationView: View {
                     iniciarAnimacion()
                 }
             Spacer()
-            
-            Button("Prueba"){
-                reinnciarAnimacion()
+            HStack{
+                Button("Prueba"){
+                    reinnciarAnimacion()
+                }
+                Button("prueba turno"){
+                    ticket.turnoActivo.toggle()
+                }
             }
             .padding()
             .clipShape(.buttonBorder)

@@ -17,6 +17,8 @@ struct TicketView: View {
     private var pantallaVentanilla: Int = 4
     private var tiempoLimite: String = "5:00"
     
+    let darkBlue: Color = Color(hue: 217/360, saturation: 83/100, brightness: 75/100)
+    let darkRed: Color = Color(red: 196/255, green: 41/255, blue: 41/255)
     
     
     
@@ -55,10 +57,11 @@ struct TicketView: View {
                    
                 }// <-- VSTACK NUMERO DE TURNO
                 .padding(.horizontal, 10)
-                .opacity(0.5)
                 .overlay(
                         RoundedRectangle(cornerRadius: 16)
-                            .stroke(.black, lineWidth: 1).opacity(0.2))
+                            .stroke(darkBlue, lineWidth: 1).opacity(0.8))
+                .foregroundStyle(darkBlue)
+                
                 VStack{
                     HStack{
                         Text("PACIENTE: ")
@@ -81,7 +84,7 @@ struct TicketView: View {
                             .bold()
                         Text("¡ES SU TURNO!")
                             .bold()
-                            .font(.system(size: 20))
+                            .font(.system(size: 30))
                             
                         
                     }// <-- HSTACK MINI NOTIFICACION
@@ -91,7 +94,7 @@ struct TicketView: View {
                     Text("VENTANILLA \(pantallaVentanilla)")
                         .font(.system(size:30))
                         .fontWeight(.bold)
-                        .foregroundStyle(Color(hue: 217/360, saturation: 83/100, brightness: 75/100))
+                        .foregroundStyle(darkBlue)
                     VStack{
                         HStack{
                             Image(systemName: "clock")
@@ -117,7 +120,7 @@ struct TicketView: View {
                             RoundedRectangle(cornerRadius: 16)
                                 .stroke(.red, lineWidth: 1)
                         )
-                    .foregroundStyle(Color(red: 196/255, green: 41/255, blue: 41/255))
+                    .foregroundStyle(darkRed)
                     
                 } //<-- VSTACK PANTALLA DINAMICA
                 .padding(20)

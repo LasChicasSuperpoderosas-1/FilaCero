@@ -72,7 +72,7 @@ struct InicioView: View {
                             .frame(width: 24, height: 24)
                             .background(Circle().fill(Brand.primary.opacity(0.18)))
                             .overlay(Circle().stroke(Brand.primary.opacity(0.35), lineWidth: 1))
-                            .padding(.top, 2)
+                            
                         Text("Presione el botón de \"Generar Turno\"")
                             .font(.body)
                             .foregroundStyle(Brand.textPrimary)
@@ -86,7 +86,7 @@ struct InicioView: View {
                             .frame(width: 24, height: 24)
                             .background(Circle().fill(Brand.primary.opacity(0.18)))
                             .overlay(Circle().stroke(Brand.primary.opacity(0.35), lineWidth: 1))
-                            .padding(.top, 2)
+                            
                         Text("Espere a ser llamado")
                             .font(.body)
                             .foregroundStyle(Brand.textPrimary)
@@ -100,7 +100,7 @@ struct InicioView: View {
                             .frame(width: 24, height: 24)
                             .background(Circle().fill(Brand.primary.opacity(0.18)))
                             .overlay(Circle().stroke(Brand.primary.opacity(0.35), lineWidth: 1))
-                            .padding(.top, 2)
+                            
                         Text("Diríjase a la ventanilla asignada")
                             .font(.body)
                             .foregroundStyle(Brand.textPrimary)
@@ -126,12 +126,13 @@ struct InicioView: View {
                         .fontWeight(.regular)
                         .foregroundStyle(Brand.textSecondary)
                 }
+                .padding(.trailing, 1)
                 .frame(maxWidth: .infinity)
                 .multilineTextAlignment(.center)
                 .padding(.top, 4)
             }
             .padding(.top, 8)
-            .padding(.bottom, 12)
+            .padding(.bottom,3)
 
 
             Spacer()
@@ -147,7 +148,7 @@ struct InicioView: View {
             }
             .buttonStyle(.borderedProminent)
             .tint(Brand.primary)
-            .padding(.bottom, 8)
+            
             .fullScreenCover(isPresented: $showTicket){
                 TicketAnimationView(showTicket: $showTicket)
             }
@@ -160,10 +161,11 @@ struct InicioView: View {
                 HStack(spacing: 6) {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                         .imageScale(.medium)
+                        .font(.system(size:25))
                     Text("Cerrar sesión")
-                        .font(.body.weight(.semibold))
+                        .font(.system(size:25, weight: .bold))
                 }
-                .frame(height: 44)
+                .frame(height: 50)
             }
             .buttonStyle(.bordered)
             .tint(Brand.primary)

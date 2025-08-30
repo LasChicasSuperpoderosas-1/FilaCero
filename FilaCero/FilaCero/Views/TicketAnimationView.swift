@@ -12,11 +12,8 @@ struct TicketAnimationView: View {
     @State private var controlAnimacion = false
     
     @State private var ticket = Ticket(
-        fecha :"27/08/2025",
         numeroDeTurno : Int.random(in: 1...999),
         nombrePaciente: "Federico Jimenez",
-        horaRegistro: "19:30:30",
-        horaActual:  "19:46:23",
         pantallaAnuncioSuperior: "Es Su turno!",
         pantallaVentanilla: 4,
         turnoActivo: false,
@@ -26,25 +23,28 @@ struct TicketAnimationView: View {
     @Binding public var showTicket: Bool
     
     var body: some View {
-        VStack{
-            
-            TicketView(data: ticket, showTicket: $showTicket)
-                .frame(width: 400)
-                .offset(y: posicionInicial)
-                .onAppear {
-                    iniciarAnimacion()
+        NavigationStack{
+            VStack{
+                
+                TicketView(data: ticket, showTicket: $showTicket)
+                    .frame(width: 400)
+                    .offset(y: posicionInicial)
+                    .onAppear {
+                        iniciarAnimacion()
+                    }
+                Spacer()
+                HStack{
+                    NavigationLink("Encuesta"){
+                        EncuestaView()
+                            .navigationBarBackButtonHidden(true)
+                    }
+                    Button("prueba turno"){
+                        ticket.turnoActivo.toggle()
+                    }
                 }
-            Spacer()
-            HStack{
-                Button("Prueba"){
-                    reinnciarAnimacion()
-                }
-                Button("prueba turno"){
-                    ticket.turnoActivo.toggle()
-                }
+                .padding()
+                .clipShape(.buttonBorder)
             }
-            .padding()
-            .clipShape(.buttonBorder)
         }
     }
     

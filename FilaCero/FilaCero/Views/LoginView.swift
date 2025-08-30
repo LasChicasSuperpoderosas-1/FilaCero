@@ -61,31 +61,31 @@ struct LoginView: View {
                 .padding(.bottom, 10)
                 .frame(width: 360)
             
+            Button(action: {
+                if email.contains("@") && !email.isEmpty{
+                     // Se pasa al inicio
+                    showMain = true
+                 }
+            }) {
+                Text("Iniciar Sesión")
+                    .font(.system(size:35, weight: .bold))
+                    .frame(maxWidth: 300)
+                    .frame(height: Brand.buttonHeight)
+            }
+            .background(
+                (email.isEmpty || password.isEmpty) ? Color(red: 211/255, green: 211/255, blue: 211/255) : Color(red: 1/255, green: 104/255, blue: 138/255)
+            ) //Hex: #D3D3D3
+            .cornerRadius(17)
+            .padding(.leading, 0)
+            .tint(
+                (email.isEmpty || password.isEmpty) ? Color(.black) : Color(red: 242/255, green: 242/255, blue: 242/255).opacity(1)
+            )
+            .padding(.top, 20)
+            .disabled(email.isEmpty || password.isEmpty)
             
-            Button("Olvidé mi contraseña") {
-                email = "JAJAJA no sabe su contraseña"
-            }.padding(.leading, -180)
-                .tint(Color(red: 1/255, green: 104/255, blue: 138/255))
             
-            Button("Iniciar Sesión") {
-               if email.contains("@") && !email.isEmpty{
-                    // Se pasa al inicio
-                   showMain = true
-                }
-            }.frame(width: 170, height: 45)
-                .background(
-                    (email.isEmpty || password.isEmpty) ? Color(red: 211/255, green: 211/255, blue: 211/255) : Color(red: 1/255, green: 104/255, blue: 138/255)
-                ) //Hex: #D3D3D3
-                .cornerRadius(17)
-                .padding(.leading, 0)
-                .tint(
-                    (email.isEmpty || password.isEmpty) ? Color(.black) : Color(red: 242/255, green: 242/255, blue: 242/255).opacity(1)
-                )
-                .padding(.top, 50)
-                .disabled(email.isEmpty || password.isEmpty)
-                
-        }        .fullScreenCover(isPresented: $showMain) {
-            // Puedes tener NavigationStack aquí dentro si tu “main” navega
+            }
+            .fullScreenCover(isPresented: $showMain) {
             NavigationStack {
                 InicioView(isSignedIn:$showMain)
             }

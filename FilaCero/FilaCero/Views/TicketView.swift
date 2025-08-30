@@ -32,8 +32,7 @@ struct TicketView: View {
                    .fontWeight(.bold)
                    .font(.system(size: 30))
                    .opacity(0.5)
-               Text(data.fecha)
-                   .opacity(0.5)
+               
                Text("Turno #")
                
                VStack{
@@ -52,6 +51,10 @@ struct TicketView: View {
                        }
                   
                }// <-- VSTACK NUMERO DE TURNO
+               .fixedSize()    
+               .allowsHitTesting(false)
+               .drawingGroup()
+               
                .padding(.horizontal, 10)
                .overlay(
                        RoundedRectangle(cornerRadius: 16)
@@ -60,18 +63,16 @@ struct TicketView: View {
                
                VStack{
                    HStack{
-                       Text("PACIENTE: ")
-                       Spacer()
+                       Text("Paciente: ")
+                           .font(.system(size: 20))
+
                        Text(data.nombrePaciente)
+                           .font(.system(size: 20, weight: .bold))
                        
                    }//<-- HSTACK PACIENTE
-                   HStack{
-                       Text("HORA REGISTRO: ")
-                       Spacer()
-                       Text(data.horaRegistro)
-                       
-                   }//<-- HSTACK HORA REGISTRO
+                   
                }// <-- VSTACK PACIENTE Y HORA REGISTRO
+               .padding(.vertical, 10)
                
                
    
@@ -90,7 +91,8 @@ struct TicketView: View {
                        }// <-- HSTACK MINI NOTIFICACION
                        .foregroundStyle(.blue)
                        
-                       Text("Dirigase a ")
+                       Text("Diríjase a la")
+                           .font(.system(size:20))
                        Text("VENTANILLA \(data.pantallaVentanilla)")
                            .font(.system(size:30))
                            .fontWeight(.bold)
@@ -160,7 +162,7 @@ struct TicketView: View {
                                
                            }// <-- HSTACK LOGO + ANUNCIO TIEMPO LIMITE
                            
-                           Text("5:00")
+                           Text("3:00")
                                .fontWeight(.bold)
                                .monospaced()
                                .offset(y:10)
@@ -186,40 +188,27 @@ struct TicketView: View {
                                .stroke(offBlue, lineWidth: 1)
                        )
                }
-               
-               
-               
-               
-               ZStack{
-                   Rectangle()
-                       .stroke(style: StrokeStyle(lineWidth: 1, dash: [10,5]))
-                       .frame(width:250,height: 50)
-                       .opacity(0.1)
-                       .padding(2)
-                   VStack{
-                       Text("HORA ACTUAL").fontWeight(.bold).opacity(0.3)
-                       Text("20:02:32")
-                       
-                   }// <-- VSTACK HORA ACTUAL
+
                    
-               }//<--ZSTACK PARA BORDE
                
                Button("CANCELAR TURNO"){
                    showTicket = false
                }
-                   .padding(4)
+                   .padding(25)
                    .foregroundStyle(Color(red: 220/255, green: 41/255, blue: 41/255))
                    .fontWeight(.bold)
                    .frame(width:210)
                    .overlay(
                            RoundedRectangle(cornerRadius: 10)
                                .stroke(.red, lineWidth: 1)
-                       )
+                  )
+                   .padding(.top,20)
                
-               
+        
            } // <-- VSTACK PRINCIPAL
-           .padding(10)
+           .padding()
            .frame(width:300)
+           
            
            
            
@@ -229,11 +218,8 @@ struct TicketView: View {
 
 #Preview {
     TicketView( data: Ticket(
-                           fecha: "27/08/2025",
                            numeroDeTurno: 12,
                            nombrePaciente: "Federico Jimenez",
-                           horaRegistro: "19:30:30",
-                           horaActual: "19:46:23",
                            pantallaAnuncioSuperior: "Es Su turno!",
                            pantallaVentanilla: 4,
                            turnoActivo: true,

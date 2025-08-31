@@ -15,7 +15,7 @@ Una aplicación para iOS multisolución diseñada para ayudar a las farmacias a 
 
 ---
 
-## ☁Descripción General
+## Descripción General
 
 La funcionalidad del proyecto se divide en 3 diferentes vistas dependiendo del nivel administrativo del usuario 
 

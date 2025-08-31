@@ -10,11 +10,14 @@ import SwiftUI
 struct TimerView: View {
 
     let startCondition: Bool
+    @Binding var stopCondition: Bool
     @State private var seconds: Int
 
-   init(seconds: Int, startCondition: Bool) {
+    init(seconds: Int, startCondition: Bool,stopCondition: Binding<Bool>) {
        self._seconds = State(initialValue: seconds)
        self.startCondition = startCondition
+        self._stopCondition = stopCondition
+        
    }
 
     var body: some View {
@@ -25,6 +28,7 @@ struct TimerView: View {
                         if (seconds > 0) {
                             seconds -= 1
                         } else {
+                            stopCondition.toggle()
                             timer.invalidate()
                         }
                     }

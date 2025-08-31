@@ -17,7 +17,7 @@ struct TicketAnimationView: View {
         pantallaAnuncioSuperior: "Es Su turno!",
         pantallaVentanilla: 4,
         turnoActivo: false,
-        tiempoRestanteTurno: 180
+        tiempoRestanteTurno: 5
         )
 
     @Binding public var showTicket: Bool

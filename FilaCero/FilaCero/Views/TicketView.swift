@@ -32,7 +32,7 @@ struct TicketView: View {
                    .fontWeight(.bold)
                    .font(.system(size: 30))
                    .opacity(0.4)
-                   .offset(y:-10)
+                   
                
                Text("Turno #")
                    .fontWeight(.bold)
@@ -198,7 +198,7 @@ struct TicketView: View {
                Button("CANCELAR TURNO"){
                    showTicket = false
                }
-                   .padding(25)
+                   .padding(20)
                    .foregroundStyle(Color(red: 220/255, green: 41/255, blue: 41/255))
                    .fontWeight(.bold)
                    .frame(width:210)
@@ -206,7 +206,7 @@ struct TicketView: View {
                            RoundedRectangle(cornerRadius: 10)
                                .stroke(.red, lineWidth: 1)
                   )
-                   .padding(.top,20)
+                   .padding(.top,16)
            
                
         

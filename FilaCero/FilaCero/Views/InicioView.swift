@@ -74,7 +74,7 @@ struct InicioView: View {
                             .overlay(Circle().stroke(Brand.primary.opacity(0.35), lineWidth: 1))
                             
                         Text("Presione el botón de \"Generar Turno\"")
-                            .font(.body)
+                            .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(Brand.textPrimary)
                     }
 
@@ -88,7 +88,7 @@ struct InicioView: View {
                             .overlay(Circle().stroke(Brand.primary.opacity(0.35), lineWidth: 1))
                             
                         Text("Espere a ser llamado")
-                            .font(.body)
+                            .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(Brand.textPrimary)
                     }
 
@@ -102,11 +102,11 @@ struct InicioView: View {
                             .overlay(Circle().stroke(Brand.primary.opacity(0.35), lineWidth: 1))
                             
                         Text("Diríjase a la ventanilla asignada")
-                            .font(.body)
+                            .font(.system(size: 16, weight: .medium))
                             .foregroundStyle(Brand.textPrimary)
                     }
                 }
-                .padding(16)
+                .padding(14)
                 .background(
                     RoundedRectangle(cornerRadius: Brand.cardRadius, style: .continuous)
                         .fill(Brand.primary.opacity(0.06))
@@ -142,7 +142,7 @@ struct InicioView: View {
                 showTicket = true // Variable para el fullscreencover
             }) {
                 Text("Generar Turno")
-                    .font(.system(size:35, weight: .bold))
+                    .font(.system(size:30, weight: .bold))
                     .frame(maxWidth: .infinity)
                     .frame(height: Brand.buttonHeight)
             }

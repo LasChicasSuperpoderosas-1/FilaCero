@@ -15,7 +15,7 @@ Una aplicación para iOS multisolución diseñada para ayudar a las farmacias a 
 
 ---
 
-## ☁️ Descripción General
+## ☁Descripción General
 
 La funcionalidad del proyecto se divide en 3 diferentes vistas dependiendo del nivel administrativo del usuario 
 
@@ -38,7 +38,7 @@ La app está desarrollada en **Swift** usando **SwiftUI**, y utiliza el patrón 
 
 ---
 
-## ✨ Características
+## Características
 
 - Gestión de turnos de entrega
 - Seguimiento del estado de la entrega
@@ -47,30 +47,30 @@ La app está desarrollada en **Swift** usando **SwiftUI**, y utiliza el patrón 
 
 ---
 
-## 🏗 Arquitectura
+## Arquitectura
 
 La aplicación está estructurada siguiendo el patrón **MVC**:
 
 ---
 
-## 📸 Capturas de Pantalla
+## Capturas de Pantalla
 
 ---
 
-## ⚙️ Dependencias
+## Dependencias
 
 ---
 
-## 🔗 Contacto 
+## Contacto 
 
 Las chicas superpoderosas es un equipo de desarrollo de software basado en el Tec de Monterrey. 
 Los miembros son: 
 
-Jordy Granados 		 
-Pablo Zapata 				
-Emilio Puga 				
-Angel Peña 			 
-Marco de la Puente 		 
-Diego Saldaña			
+Jordy Granados,  		 
+Pablo Zapata, 				
+Emilio Puga, 				
+Angel Peña, 			 
+Marco de la Puente, 		 
+Diego Saldaña,			
 
 

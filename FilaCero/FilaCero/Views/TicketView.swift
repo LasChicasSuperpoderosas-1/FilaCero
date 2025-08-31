@@ -17,7 +17,7 @@ struct TicketView: View {
    let offBlue: Color = Color(red: 88/255, green: 116/255, blue: 147/255)
    
     @Binding public var showTicket: Bool
-   
+    @State var tiempoTermino: Bool = false
    var body: some View {
        ZStack{
           
@@ -31,31 +31,34 @@ struct TicketView: View {
                Text("FARMACIA NOVA")
                    .fontWeight(.bold)
                    .font(.system(size: 30))
-                   .opacity(0.5)
+                   .opacity(0.4)
+                   .offset(y:-10)
                
                Text("Turno #")
+                   .fontWeight(.bold)
+                   .opacity(0.3)
                
                VStack{
                    if (data.numeroDeTurno < 10){
                        Text("00\(data.numeroDeTurno)")
                                .monospaced()
-                               .font(.system(size: 50, weight: .bold))
+                               .font(.system(size: 60, weight: .bold))
                    }else if (data.numeroDeTurno < 100){
                        Text("0\(data.numeroDeTurno)")
                                .monospaced()
-                               .font(.system(size: 50, weight: .bold))
+                               .font(.system(size: 60, weight: .bold))
                        }else {
                            Text("\(data.numeroDeTurno)")
                                .monospaced()
-                               .font(.system(size: 50, weight: .bold))
+                               .font(.system(size: 60, weight: .bold))
                        }
                   
                }// <-- VSTACK NUMERO DE TURNO
                .fixedSize()    
                .allowsHitTesting(false)
                .drawingGroup()
-               
                .padding(.horizontal, 10)
+               .padding(10)
                .overlay(
                        RoundedRectangle(cornerRadius: 16)
                            .stroke(darkBlue, lineWidth: 1).opacity(0.8))
@@ -93,6 +96,7 @@ struct TicketView: View {
                        
                        Text("Diríjase a la")
                            .font(.system(size:20))
+                           .opacity(0.5)
                        Text("VENTANILLA \(data.pantallaVentanilla)")
                            .font(.system(size:30))
                            .fontWeight(.bold)
@@ -108,7 +112,7 @@ struct TicketView: View {
                                
                            }// <-- HSTACK LOGO + ANUNCIO TIEMPO LIMITE
                            
-                           TimerView(seconds:data.tiempoRestanteTurno, startCondition:data.turnoActivo)
+                           TimerView(seconds:data.tiempoRestanteTurno, startCondition:data.turnoActivo,stopCondition: $tiempoTermino)
                                .fontWeight(.bold)
                                .monospaced()
                                .offset(y:10)
@@ -203,6 +207,7 @@ struct TicketView: View {
                                .stroke(.red, lineWidth: 1)
                   )
                    .padding(.top,20)
+           
                
         
            } // <-- VSTACK PRINCIPAL
@@ -210,9 +215,15 @@ struct TicketView: View {
            .frame(width:300)
            
            
-           
+         
+          
            
        }// <-- ZSTACK PARA LA IMAGEN DE FONDO
+       .onChange(of: tiempoTermino) { oldValue, newValue in
+           if newValue {
+               showTicket = false
+           }
+       }
    }
 }
 

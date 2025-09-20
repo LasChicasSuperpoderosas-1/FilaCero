@@ -5,6 +5,8 @@
 //  Created by Angel Orlando Anguiano Peña on 28/08/25.
 //
 
+//VISTA PARA PACIENTE
+
 import SwiftUI
 
 struct EncuestaView: View {

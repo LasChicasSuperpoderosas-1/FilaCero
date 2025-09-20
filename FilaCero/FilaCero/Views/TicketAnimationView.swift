@@ -5,6 +5,9 @@
 //  Created by Emilio Puga on 27/08/25.
 //
 
+
+//VISTA PARA PACIENTE
+
 import SwiftUI
 
 struct TicketAnimationView: View {

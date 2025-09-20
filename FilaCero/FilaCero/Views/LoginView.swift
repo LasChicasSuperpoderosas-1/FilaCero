@@ -5,6 +5,8 @@
 //  Created by Alumno on 26/08/25.
 //
 
+//VISTA PARA PACIENTE, VENTANILLERO, Y ADMINISTRADOR
+
 import SwiftUI
 
 struct LoginView: View {

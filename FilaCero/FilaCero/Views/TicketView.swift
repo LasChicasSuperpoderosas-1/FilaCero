@@ -5,6 +5,9 @@
 //  Created by Marco de la Puente on 27/08/25.
 //
 
+//VISTA PARA PACIENTE
+
+
 import SwiftUI
 
 struct TicketView: View {

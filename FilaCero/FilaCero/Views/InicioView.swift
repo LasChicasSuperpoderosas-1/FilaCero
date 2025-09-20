@@ -5,6 +5,8 @@
 //  Created by Alumno on 26/08/25.
 //
 
+//VISTA PARA PACIENTE
+
 import SwiftUI
 
 struct InicioView: View {

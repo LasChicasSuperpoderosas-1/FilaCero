@@ -5,6 +5,7 @@
 //  Created by Diego Saldaña on 19/09/25.
 //
 
+//VISTA PARA ADMINISTRADOR
 import SwiftUI
 
 struct TurnoEspecialView: View {

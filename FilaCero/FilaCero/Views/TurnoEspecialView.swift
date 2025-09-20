@@ -18,14 +18,13 @@ struct TurnoEspecialView: View {
                 .font(.system(size: 35, weight: .bold, design: .default))
                 .padding()
             
-
-            
             List(listaEspecial) { item in
                 EspecialRow(testespecial: item)
                     .contentShape(Rectangle())
                     .background(
                         RoundedRectangle(cornerRadius: 8)
-                            .fill(testespecial?.id == item.id ? Color.blue.opacity(0.3) : Color.clear)
+                            .fill(testespecial?.id == item.id ? Brand.primary.opacity(0.3) : Color.clear)
+                            .frame(width: 350, height: 60)
                     )
                     .onTapGesture {
                     if testespecial?.id == item.id {
@@ -35,7 +34,6 @@ struct TurnoEspecialView: View {
                     }
                 }
             }
-            
             
             Button(action: {
                 if let seleccionado = testespecial {

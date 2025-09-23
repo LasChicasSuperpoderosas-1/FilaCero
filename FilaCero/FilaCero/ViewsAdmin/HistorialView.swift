@@ -1,17 +1,18 @@
 //
-//  VentanillaPrueba.swift
+//  HistorialView.swift
 //  FilaCero
 //
-//  Created by Emilio Puga on 22/09/25.
+//  Created by Alumno on 23/09/25.
 //
 
 import SwiftUI
 
-struct VentanillaPrueba: View {
+struct HistorialView: View {
     var body: some View {
         Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
     }
 }
+
 #Preview {
-    VentanillaPrueba()
+    HistorialView()
 }

@@ -25,7 +25,7 @@ struct VentanillaPrueba: View {
 
         // MARK: - Llamada API
         func callAPIVentanillas() async {
-            guard let url = URL(string: "https://TU-SERVIDOR/api/ventanillas") else {
+            guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/ventanillas") else {
                 print("URL inválida")
                 return
             }

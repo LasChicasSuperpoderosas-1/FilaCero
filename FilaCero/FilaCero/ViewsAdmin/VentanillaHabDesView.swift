@@ -25,7 +25,7 @@ struct VentanillaSimpleView: View {
 
     var body: some View {
         ZStack {
-            Color(UIColor.systemGray6).ignoresSafeArea()
+            //Color(UIColor.systemGray6).ignoresSafeArea()
 
             VStack(spacing: 28) {
                 // Header

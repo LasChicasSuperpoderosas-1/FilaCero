@@ -20,7 +20,7 @@ final class PinnedSessionDelegate: NSObject, URLSessionDelegate {
 
         guard challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
               let serverTrust = challenge.protectionSpace.serverTrust,
-              let serverCert  = SecTrustGetCertificateAtIndex(serverTrust, 0)
+              let serverCert  = SecTrustCopyCertificateChain(serverTrust)
         else {
             completionHandler(.performDefaultHandling, nil)
             return
@@ -35,7 +35,7 @@ final class PinnedSessionDelegate: NSObject, URLSessionDelegate {
         }
 
         // 2) Toma el cert presentado por el server (leaf)
-        let serverData = SecCertificateCopyData(serverCert) as Data
+        let serverData = SecCertificateCopyData(serverCert as! SecCertificate) as Data
 
         // 3) Carga tu .cer del bundle (DEBE ser el leaf del host)
         guard let localURL  = Bundle.main.url(forResource: certName, withExtension: certExt),

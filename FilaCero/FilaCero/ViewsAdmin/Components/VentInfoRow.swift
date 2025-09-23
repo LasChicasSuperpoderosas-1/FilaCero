@@ -50,16 +50,6 @@ struct VentInfoRow: View {
                 title: "Horarios",
                 subtitle: "Configurar horarios de atención al cliente"
             )
-            VentInfoRow(
-                icon: "power",
-                title: "Habilitar/Deshabilitar",
-                subtitle: "Cambiar estado de la ventanilla"
-            )
-            VentInfoRow(
-                icon: "clock.arrow.circlepath",
-                title: "Historial",
-                subtitle: "Ver historial de atenciones"
-            )
         }
         .padding()
         .background(Color(.systemGroupedBackground))

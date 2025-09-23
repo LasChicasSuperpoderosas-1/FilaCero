@@ -1,10 +1,9 @@
 import SwiftUI
 
 struct VentanillaDetailView: View {
-    let titulo: String = "Ventanilla 1"
+    let titulo: String
 
     var body: some View {
-        NavigationStack {
             ScrollView {
                 VStack(spacing: 20) {
                     NavigationLink {
@@ -41,10 +40,11 @@ struct VentanillaDetailView: View {
             }
             .navigationTitle(titulo)
             .navigationBarTitleDisplayMode(.large)
-        }
     }
 }
 
 #Preview {
-    VentanillaDetailView()
+    NavigationStack{
+        VentanillaDetailView(titulo: "Ventanilla 1")
+    }
 }

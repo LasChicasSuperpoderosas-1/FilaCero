@@ -13,10 +13,6 @@
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
 		D9D3CE1E2E82816000E25E9A /* Exceptions for "FilaCero" folder in "FilaCero" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			assetTagsByRelativePath = {
-				Certificado/ca.tc2007b.tec.mx.cer = (New, );
-				Certificado/tc2007b.cer = (New, );
-			};
 			membershipExceptions = (
 				Info.plist,
 			);

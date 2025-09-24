@@ -8,14 +8,27 @@
 import SwiftUI
 
 struct VentanillasHomeView: View {
-    let ventanillas: [Ventanilla]
+    @StateObject private var vm = VentanillasVM()
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: 16) {
+                    Image("LogoNova")
+                        .resizable(resizingMode: .stretch)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 212)
+                    Text("Sistema de Ventanillas")
+                        .foregroundStyle(Color(red:102/255, green: 102/255, blue: 102/255)) //Hex: #666666
+                        .bold()
+                        .font(.system(size:20))
+                        .padding(.bottom, 40)
+                    
+                    if let msg = vm.errorMessage {
+                        Text(msg).foregroundStyle(.red).font(.footnote)
+                    }
 
-                    ForEach(ventanillas) { v in
+                    ForEach(vm.ventanillas) { v in
                         NavigationLink {
                             VentanillaDetailView(titulo: v.titulo)
                         } label: {
@@ -26,19 +39,14 @@ struct VentanillasHomeView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
             }
-            .navigationTitle("Inicio")
-            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("") // opcional
+            .toolbar(.hidden, for: .navigationBar) // si quieres el look limpio
+            .refreshable { await vm.load() }   // pull to refresh
+            .task { await vm.load() }
         }
     }
 }
 
 #Preview {
-    let sample: [Ventanilla] = [
-        .init(id: 1, codigo: 1, activa: false, estado: .APAGADA),
-        .init(id: 2, codigo: 2, activa: true,  estado: .LIBRE),
-        .init(id: 3, codigo: 3, activa: true,  estado: .OCUPADA),
-        .init(id: 4, codigo: 4, activa: true,  estado: .RECESO)
-    ]
-    
-    VentanillasHomeView(ventanillas: sample)
+    VentanillasHomeView()
 }

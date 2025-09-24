@@ -12,7 +12,7 @@ struct FilaCeroApp: App {
     }
 
     var body: some Scene {
-        WindowGroup { AdminPrueba() }
+        WindowGroup { AdminHomeView() }
     }
 }
 

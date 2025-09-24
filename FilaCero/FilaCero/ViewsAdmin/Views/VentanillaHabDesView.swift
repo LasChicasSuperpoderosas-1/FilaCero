@@ -8,17 +8,27 @@
 import SwiftUI
 
 struct VentanillaSimpleView: View {
+    let ventanillaID: Int
+    let windowName: String
+    let initialEnabled: Bool
+
     // Datos de la ventanilla (ajústalos según tu caso)
-    @State private var windowId: Int = 7
-    @State private var windowName: String = "Ventanilla 7"
-    @State private var isEnabled: Bool = true
+    @State private var isEnabled: Bool
     @State private var updatedAt: Date = .now
+    
 
     // Estado de UI
     @State private var isLoading = false
     @State private var showDisableConfirm = false
     @State private var showError = false
     @State private var errorMsg = ""
+    
+    init(ventanillaID: Int, windowName: String, initialEnabled: Bool) {
+            self.ventanillaID = ventanillaID
+            self.windowName = windowName
+            self.initialEnabled = initialEnabled
+            _isEnabled = State(initialValue: initialEnabled)
+        }
 
     private var statusLabel: String { isEnabled ? "Libre" : "Deshabilitada" }
     private var statusColor: Color  { isEnabled ? .green : .red }
@@ -49,7 +59,7 @@ struct VentanillaSimpleView: View {
                 // Card: Información
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Información").font(.title3.weight(.semibold))
-                    infoRow("ID", "#\(windowId)")
+                    infoRow("ID", "#\(ventanillaID)")
                     infoRow("Nombre", windowName)
                     infoRow("Estado", statusLabel)
                 }
@@ -141,39 +151,39 @@ struct VentanillaSimpleView: View {
 
     // MARK: - Llamada al endpoint desde la vista
     @MainActor
-    func cambiarEstado(_ value: Bool) async {
-        isLoading = true
-        showError = false
-        errorMsg = ""
+        func cambiarEstado(_ value: Bool) async {
+            isLoading = true
+            showError = false
+            errorMsg = ""
 
-        do {
-            let estadoFinal = try await VentanillaHabDesAPI.cambiarEstado(ventanillaId: windowId, activa: value)
-            isEnabled  = estadoFinal                 // lo que quedó en el server (o lo enviado)
-            // Si tu server no regresa nombre/código, no lo toques:
-            // windowName = windowName
-            updatedAt  = .now
-        } catch {
-            showError = true
-            errorMsg  = error.localizedDescription
+            do {
+                // Usa el id correcto
+                let estadoFinal = try await VentanillaHabDesAPI.cambiarEstado(ventanillaId: ventanillaID, activa: value)
+                isEnabled  = estadoFinal
+                updatedAt  = .now
+            } catch {
+                showError = true
+                errorMsg  = error.localizedDescription
+            }
+
+            isLoading = false
         }
 
-        isLoading = false
-    }
+        func setActiva(_ value: Bool) async { await cambiarEstado(value) }
 
-    // (Opcional) alias para compatibilidad si antes llamabas setActiva(_:)
-    func setActiva(_ value: Bool) async { await cambiarEstado(value) }
-
-    // MARK: - Fila simple
-    private func infoRow(_ label: String, _ value: String) -> some View {
-        HStack {
-            Text(label).foregroundColor(.secondary)
-            Spacer()
-            Text(value).foregroundColor(.primary)
+        private func infoRow(_ label: String, _ value: String) -> some View {
+            HStack {
+                Text(label).foregroundColor(.secondary)
+                Spacer()
+                Text(value).foregroundColor(.primary)
+            }
+            .font(.body)
         }
-        .font(.body)
     }
-}
-
 #Preview {
-    VentanillaSimpleView()
+    VentanillaSimpleView(
+        ventanillaID: 1,
+        windowName: "Ventanilla 1",
+        initialEnabled: false
+    )
 }

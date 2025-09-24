@@ -30,10 +30,11 @@ struct VentanillasHomeView: View {
 
                     ForEach(vm.ventanillas) { v in
                         NavigationLink {
-                            VentanillaDetailView(titulo: v.titulo)
+                            VentanillaDetailView(titulo: v.titulo, ventanillaId: v.id,initialEnabled: v.activa)
                         } label: {
                             VentanillaRowCard(ventanilla: v)
                         }
+
                     }
                 }
                 .padding(.horizontal, 16)

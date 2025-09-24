@@ -10,9 +10,22 @@
 		BAA223712E577CBC00447D49 /* FilaCero.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FilaCero.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		D9D3CE1E2E82816000E25E9A /* Exceptions for "FilaCero" folder in "FilaCero" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BAA223702E577CBC00447D49 /* FilaCero */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		BAA223732E577CBC00447D49 /* FilaCero */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				D9D3CE1E2E82816000E25E9A /* Exceptions for "FilaCero" folder in "FilaCero" target */,
+			);
 			path = FilaCero;
 			sourceTree = "<group>";
 		};
@@ -77,6 +90,9 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+				);
 				LastSwiftUpdateCheck = 1640;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
@@ -256,6 +272,7 @@
 				DEVELOPMENT_TEAM = W6WL5YV57Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FilaCero/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -284,6 +301,7 @@
 				DEVELOPMENT_TEAM = W6WL5YV57Y;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FilaCero/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

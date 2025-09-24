@@ -2,6 +2,9 @@ import SwiftUI
 
 struct VentanillaDetailView: View {
     let titulo: String
+    let ventanillaId: Int
+    let initialEnabled: Bool
+    
 
     var body: some View {
             ScrollView {
@@ -17,7 +20,7 @@ struct VentanillaDetailView: View {
                     }
 
                     NavigationLink {
-                        VentanillaSimpleView()
+                        VentanillaSimpleView(ventanillaID: ventanillaId, windowName: titulo,initialEnabled: initialEnabled)
                     } label: {
                         VentInfoRow(
                             icon: "power",
@@ -45,6 +48,6 @@ struct VentanillaDetailView: View {
 
 #Preview {
     NavigationStack{
-        VentanillaDetailView(titulo: "Ventanilla 1")
+        VentanillaDetailView(titulo: "Ventanilla 1", ventanillaId: 1, initialEnabled: false)
     }
 }

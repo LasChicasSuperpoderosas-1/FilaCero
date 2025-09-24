@@ -24,33 +24,41 @@ struct AdminPrueba: View {
         }
 
         // MARK: - Llamada API
-        func callAPIVentanillas() async {
-            guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/ventanillas") else {
-                print("URL inválida")
+    func callAPIVentanillas() async {
+        let urlStr = "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/ventanillas"
+        guard let url = URL(string: urlStr) else { print("URL inválida"); return }
+
+        do {
+            let (data, resp) = try await URLSession.shared.data(from: url)
+            guard let http = resp as? HTTPURLResponse, (200...299).contains(http.statusCode) else {
+                print("Respuesta no HTTP 2xx"); return
+            }
+
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .useDefaultKeys
+
+            // 1) Intenta decodificar el envelope { ok, ventanillas: [...] }
+            if let envelope = try? decoder.decode(VentanillasEnvelope.self, from: data) {
+                print("ok: \(envelope.ok), total: \(envelope.ventanillas.count)")
+                envelope.ventanillas.forEach { v in
+                    print("ID:\(v.id) Código:\(v.codigo) Activa:\(v.activa) Estado:\(v.estado.rawValue)")
+                }
                 return
             }
 
-            do {
-                let (data, response) = try await URLSession.shared.data(from: url)
-
-                guard let httpResponse = response as? HTTPURLResponse,
-                      (200...299).contains(httpResponse.statusCode) else {
-                    print("Respuesta no válida del servidor")
-                    return
-                }
-
-                let decoder = JSONDecoder()
-                let ventanillas = try decoder.decode([Ventanilla].self, from: data)
-
-                // 👉 Aquí imprimimos cada ventanilla en consola
-                for v in ventanillas {
-                    print("ID: \(v.id) - Código: \(v.codigo) - Activa: \(v.activa) - Estado: \(v.estado.display)")
-                }
-
-            } catch {
-                print("Error en la llamada: \(error.localizedDescription)")
+            // 2) Fallback por si algún día el backend regresa un array directo
+            let list = try decoder.decode([Ventanilla].self, from: data)
+            print("total: \(list.count)")
+            list.forEach { v in
+                print("ID:\(v.id) Código:\(v.codigo) Activa:\(v.activa) Estado:\(v.estado.rawValue)")
             }
+
+        } catch {
+            print("❌ Error: \(error.localizedDescription)")
         }
+    }
+
+
     }
 
 #Preview {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct VentanillasEnvelope: Codable {
+struct VentanillasEnvelope: Decodable {
     let ok: Bool
     let ventanillas: [Ventanilla]
 }

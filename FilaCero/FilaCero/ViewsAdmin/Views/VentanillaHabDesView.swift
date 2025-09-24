@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct VentanillaSimpleView: View {
-    // Variables simples
+    // Datos de la ventanilla (ajústalos según tu caso)
     @State private var windowId: Int = 7
     @State private var windowName: String = "Ventanilla 7"
     @State private var isEnabled: Bool = true
     @State private var updatedAt: Date = .now
 
-    // UI state
+    // Estado de UI
     @State private var isLoading = false
     @State private var showDisableConfirm = false
     @State private var showError = false
@@ -25,8 +25,6 @@ struct VentanillaSimpleView: View {
 
     var body: some View {
         ZStack {
-            //Color(UIColor.systemGray6).ignoresSafeArea()
-
             VStack(spacing: 28) {
                 // Header
                 VStack(alignment: .leading, spacing: 6) {
@@ -71,7 +69,7 @@ struct VentanillaSimpleView: View {
                         if isEnabled {
                             showDisableConfirm = true
                         } else {
-                            Task { await setActiva(true) }
+                            Task { await cambiarEstado(true) }
                         }
                     } label: {
                         HStack(spacing: 14) {
@@ -127,7 +125,7 @@ struct VentanillaSimpleView: View {
                             isPresented: $showDisableConfirm,
                             titleVisibility: .visible) {
             Button("Deshabilitar ventanilla", role: .destructive) {
-                Task { await setActiva(false) }
+                Task { await cambiarEstado(false) }
             }
             Button("Cancelar", role: .cancel) {}
         } message: {
@@ -140,42 +138,30 @@ struct VentanillaSimpleView: View {
             Text(errorMsg)
         }
     }
-//-----------------------------------------------
-    private func setActiva(_ activa: Bool) async {
-        guard !isLoading else { return }
-        await MainActor.run { isLoading = true }
 
-        // Snapshot para rollback
-        let prevEnabled = isEnabled
-        let prevName    = windowName
-        let prevDate    = updatedAt
-
-        // Optimistic UI
-        await MainActor.run {
-            isEnabled = activa
-            updatedAt = .now
-        }
+    // MARK: - Llamada al endpoint desde la vista
+    @MainActor
+    func cambiarEstado(_ value: Bool) async {
+        isLoading = true
+        showError = false
+        errorMsg = ""
 
         do {
-            let resp = try await VentanillaHabDesAPI.cambiarEstadoPinned(id: windowId, activa: activa)
-            await MainActor.run {
-                windowName = "Ventanilla \(resp.codigoVentanilla)"
-                isEnabled  = resp.activa
-                updatedAt  = .now
-                isLoading  = false
-            }
+            let estadoFinal = try await VentanillaHabDesAPI.cambiarEstado(ventanillaId: windowId, activa: value)
+            isEnabled  = estadoFinal                 // lo que quedó en el server (o lo enviado)
+            // Si tu server no regresa nombre/código, no lo toques:
+            // windowName = windowName
+            updatedAt  = .now
         } catch {
-            await MainActor.run {
-                // Rollback y alerta
-                isEnabled = prevEnabled
-                windowName = prevName
-                updatedAt = prevDate
-                errorMsg = (error as NSError).localizedDescription
-                showError = true
-                isLoading = false
-            }
+            showError = true
+            errorMsg  = error.localizedDescription
         }
+
+        isLoading = false
     }
+
+    // (Opcional) alias para compatibilidad si antes llamabas setActiva(_:)
+    func setActiva(_ value: Bool) async { await cambiarEstado(value) }
 
     // MARK: - Fila simple
     private func infoRow(_ label: String, _ value: String) -> some View {

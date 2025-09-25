@@ -11,6 +11,7 @@ enum AdminTab: Hashable {
     case ventanillas
     case estadisticas
     case perfil
+    case turno_especial
 }
 
 struct AdminHomeView: View {
@@ -48,6 +49,16 @@ struct AdminHomeView: View {
                 Label("Perfil", systemImage: "person.crop.circle")
             }
             .tag(AdminTab.perfil)
+            
+            NavigationStack {
+                TurnoEspecialView()
+                    .navigationTitle("Turno Especial")
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+            .tabItem {
+                Label("Turno Especial", systemImage: "list.bullet.rectangle.fill")
+            }
+            .tag(AdminTab.turno_especial)
         }
     }
 }

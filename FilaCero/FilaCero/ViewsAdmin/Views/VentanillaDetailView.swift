@@ -44,7 +44,7 @@ struct VentanillaDetailView: View {
         }
         .navigationTitle(titulo)
         .navigationBarTitleDisplayMode(.large)
-        .navigationBarBackButtonHidden(true)          // 👈 ocultar back por defecto
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
@@ -52,11 +52,13 @@ struct VentanillaDetailView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.left")
+                            .foregroundStyle(.blue) 
                         Text("Volver")
+                            .foregroundStyle(.blue)
                     }
+                    
                 }
-                .buttonStyle(.plain)                   // mantiene estilo nativo
-                .tint(.blue)                          // opcional: color del botón
+                .buttonStyle(.plain)
                 .accessibilityLabel("Volver")
             }
         }

@@ -9,7 +9,7 @@ import Foundation
 
 class PrioridadViewModel: ObservableObject {
     func asignarTurnoEspecial(nombrePaciente: String, completion: @escaping (Bool) -> Void) {
-        guard let url = URL(string: "https://a01571609.tc2007b.tec.mx:10204/turnos/update_prioridad") else {
+        guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/turnos/turno_especial") else {
             print("URL inválida")
             completion(false)
             return

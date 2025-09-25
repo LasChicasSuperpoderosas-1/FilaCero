@@ -83,7 +83,7 @@ final class HistorialVentanillasVM: ObservableObject {
         isLoading = true; error = nil; page = 0
         items = []; filtered = []
         do {
-            let nuevos = try await MockAPI.fetch(page: page, size: pageSize)
+            let nuevos = try await HistorialAPI.fetch(page: page, size: pageSize)
             items = nuevos
             applyFilters()
             isLoading = false
@@ -106,7 +106,7 @@ final class HistorialVentanillasVM: ObservableObject {
         isLoading = true; defer { isLoading = false }
         page += 1
         do {
-            let nuevos = try await MockAPI.fetch(page: page, size: pageSize)
+            let nuevos = try await HistorialAPI.fetch(page: page, size: pageSize)
             items.append(contentsOf: nuevos)
             applyFilters()
         } catch { self.error = error.localizedDescription }
@@ -388,45 +388,6 @@ struct FiltrosSheet: View {
         desde = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         usarHasta = false
         hastaValor = desde
-    }
-}
-
-// MARK: - Mock API
-enum MockAPI {
-    static func fetch(page: Int, size: Int) async throws -> [Atencion] {
-        try await Task.sleep(nanoseconds: 200_000_000)
-        let base = Date()
-        var out: [Atencion] = []
-        for i in 0..<size {
-            let dayOffset = Int.random(in: 0...6)
-            let inicio = Calendar.current.date(byAdding: .minute, value: -Int.random(in: 5...480), to: Calendar.current.date(byAdding: .day, value: -dayOffset, to: base)!)!
-            let espera = Int.random(in: 1...20) * 60
-            let servicio = Int.random(in: 5...35) * 60
-
-            let sesionEstado: SesionEstado = [.terminado, .asignado].randomElement()!
-            let turnoEstado: TurnoEstado = [.completado, .pendiente, .cancelado].randomElement()!
-            let prioridad: Prioridad = [.normal, .especial].randomElement()!
-
-            let llamado = Bool.random() ? inicio.addingTimeInterval(TimeInterval(espera)) : nil
-            let fin: Date? = (sesionEstado == .terminado) ? (llamado ?? inicio).addingTimeInterval(TimeInterval(servicio)) : nil
-
-            out.append(
-                Atencion(
-                    id: page*size + i,
-                    ventanillaCodigo: Int.random(in: 1...8),
-                    folioTurno: "A-\(1000 + page*size + i)",
-                    pacienteNombre: ["Juan Pérez","María López","Luis Díaz","Ana Ruiz"].randomElement()!,
-                    ventanilleroNombre: ["Karla R.","Roberto G.","Sara M.","Miguel T."].randomElement()!,
-                    sesionEstado: sesionEstado,
-                    turnoEstado: turnoEstado,
-                    prioridad: prioridad,
-                    inicio: inicio,
-                    llamado: llamado,
-                    fin: fin
-                )
-            )
-        }
-        return out
     }
 }
 

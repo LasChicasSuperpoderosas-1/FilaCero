@@ -45,7 +45,7 @@ struct HistorialAPI {
     let baseURL: URL
     let session: URLSession
 
-    init(baseURL: URL = URL(string: "https://a00998753.tc2007b.tec.mx:10203")!,
+    init(baseURL: URL = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207")!,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.session = session

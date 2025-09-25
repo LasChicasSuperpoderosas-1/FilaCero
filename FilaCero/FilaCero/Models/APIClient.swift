@@ -27,6 +27,8 @@ enum APIError: LocalizedError {
     }
 }
 
+
+
 struct APIClient {
     static let shared = APIClient()
     private init() {}
@@ -87,5 +89,69 @@ struct APIClient {
             throw APIError.http(http.statusCode, nil)
         }
     }
+    
+    // ---------- HorarioAdmin ----------
+    func programarCierre(ventanillaID: Int,
+                         finEn: Date,
+                         session: URLSession = .shared) async throws -> ProgramarCierreResponse {
+        let url = API.base.appendingPathComponent("/ventanillas/\(ventanillaID)/programar_cierre")
+
+        var req = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
+        req.httpMethod = "PUT"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.setValue("application/json", forHTTPHeaderField: "Accept")
+
+        // Formato EXACTO que espera el backend
+        let df = DateFormatter()
+        df.locale = Locale(identifier: "en_US_POSIX")
+        df.timeZone = .current
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+        let body = ProgramarCierreRequest(fin_en: df.string(from: finEn))
+        req.httpBody = try JSONEncoder().encode(body)
+
+        let (data, resp) = try await session.data(for: req)
+        guard let http = resp as? HTTPURLResponse else { throw APIError.invalidResponse }
+
+        if (200..<300).contains(http.statusCode) {
+            do {
+                return try JSONDecoder().decode(ProgramarCierreResponse.self, from: data)
+            } catch {
+                throw APIError.decoding(error.localizedDescription)
+            }
+        } else {
+            // intenta leer {"error": "..."} del backend
+            if let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let msg = obj["error"] as? String {
+                throw APIError.http(http.statusCode, msg)
+            }
+            throw APIError.http(http.statusCode, nil)
+        }
+    }
+    
+    func getHorarioActual(ventanillaID: Int,
+                              session: URLSession = .shared) async throws -> HorarioActualResponse {
+            let url = API.base.appendingPathComponent("/ventanillas/\(ventanillaID)/horario_actual")
+            var req = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
+            req.httpMethod = "GET"
+            req.setValue("application/json", forHTTPHeaderField: "Accept")
+
+            let (data, resp) = try await session.data(for: req)
+            guard let http = resp as? HTTPURLResponse else { throw APIError.invalidResponse }
+            guard (200..<300).contains(http.statusCode) else {
+                if let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+                   let msg = obj["error"] as? String {
+                    throw APIError.http(http.statusCode, msg)
+                }
+                throw APIError.http(http.statusCode, nil)
+            }
+
+            do {
+                return try JSONDecoder().decode(HorarioActualResponse.self, from: data)
+            } catch {
+                throw APIError.decoding(error.localizedDescription)
+            }
+        }
+
 }
 

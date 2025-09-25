@@ -9,7 +9,7 @@ import SwiftUI
 struct FilaCeroApp: App {
 
     var body: some Scene {
-        WindowGroup { AdminHomeView() }
+        WindowGroup { TurnoEspecialView() }
 
     }
 }

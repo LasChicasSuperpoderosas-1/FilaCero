@@ -10,7 +10,7 @@ struct VentanillaDetailView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     NavigationLink {
-                        HorariosView()
+                        VentanillaHorariosView(ventanillaID: ventanillaId, windowName: titulo)
                     } label: {
                         VentInfoRow(
                             icon: "clock",

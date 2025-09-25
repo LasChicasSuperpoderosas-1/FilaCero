@@ -28,8 +28,7 @@ struct LoginView: View {
                 .bold()
                 .font(.system(size:20))
                 .padding(.bottom, 40)
-
-            // Correo
+            
             Group {
                 Text("Correo electrónico")
                     .foregroundStyle(Color(red:102/255, green:102/255, blue:102/255))
@@ -38,7 +37,7 @@ struct LoginView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 24)
 
-                TextField("Ejemplo@ternium.com", text: $email)
+                TextField("Ingresa tu correo electrónico", text: $email)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.emailAddress)
                     .autocorrectionDisabled()
@@ -112,7 +111,7 @@ struct LoginView: View {
                 case "VENTANILLERO":
                     VentanillaPrueba()
                 case "PACIENTE":
-                    EncuestaView()
+                    InicioView(isSignedIn: $showMain)
                 default:
                     InicioView(isSignedIn: $showMain)
                 }

@@ -76,7 +76,10 @@ final class HistorialVentanillasVM: ObservableObject {
     private var page: Int = 0
     private let pageSize = 30
 
-    init() { Task { await refresh() } }
+    init(initialVentanilla: Int? = nil) {
+        self.filtroVentanilla = initialVentanilla
+        Task { await refresh() }
+    }
 
     @MainActor
     func refresh() async {
@@ -150,6 +153,10 @@ final class HistorialVentanillasVM: ObservableObject {
 struct HistorialView: View {
     @StateObject private var vm = HistorialVentanillasVM()
     @State private var showFilters = false
+    
+    init(initialVentanilla: Int? = nil) {
+        _vm = StateObject(wrappedValue: HistorialVentanillasVM(initialVentanilla: initialVentanilla))
+    }
 
     var body: some View {
         NavigationStack {

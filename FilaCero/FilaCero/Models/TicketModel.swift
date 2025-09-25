@@ -16,3 +16,20 @@ struct Ticket : Identifiable {
     public var turnoActivo: Bool
     public var tiempoRestanteTurno: Int
 }
+
+// MARK: - Requests/Responses del backend
+struct CreateTicketRequest: Codable {
+    let paciente_id: Int
+    let prioridad: Int
+}
+
+struct TicketDTO: Codable {
+    let id_turno: Int
+    let numeroDeTurno: Int
+    let folio_turno: String
+    let nombrePaciente: String
+    let turnoActivo: Bool
+    let pantallaVentanilla: Int?
+    let tiempoRestanteTurno: Int
+}
+

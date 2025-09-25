@@ -155,25 +155,30 @@ struct APIClient {
     
     func createTicket(pacienteID: Int,
                       prioridad: Int = 0,
-                      session: URLSession = .shared) async throws -> TicketModelApi {
-        // Si ya tienes API.base, úsalo; si no, cambia por tu base URL
+                      session: URLSession = .shared) async throws -> Ticket {
         let url = API.base.appendingPathComponent("/postTurnos")
         var req = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.setValue("application/json", forHTTPHeaderField: "Accept")
-        
+
         let body = CreateTicketRequest(paciente_id: pacienteID, prioridad: prioridad)
         req.httpBody = try JSONEncoder().encode(body)
-        
+
         let (data, resp) = try await session.data(for: req)
         guard let http = resp as? HTTPURLResponse else { throw APIError.invalidResponse }
-        
+
         if (200..<300).contains(http.statusCode) {
             let dto = try JSONDecoder().decode(TicketDTO.self, from: data)
-            return TicketModelApi(from: dto)
+            return Ticket(
+                numeroDeTurno: dto.numeroDeTurno,
+                nombrePaciente: dto.nombrePaciente,
+                pantallaAnuncioSuperior: dto.turnoActivo ? "¡ES SU TURNO!" : "ESPERE SU VENTANILLA",
+                pantallaVentanilla: dto.pantallaVentanilla ?? 0,
+                turnoActivo: dto.turnoActivo,
+                tiempoRestanteTurno: dto.tiempoRestanteTurno
+            )
         } else {
-            // extrae mensaje { "error": "..." } si viene
             if let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                let msg = obj["error"] as? String {
                 throw APIError.http(http.statusCode, msg)
@@ -181,21 +186,27 @@ struct APIClient {
             throw APIError.http(http.statusCode, nil)
         }
     }
-    
-    /// GET /getTurnos/{folio} → consulta ticket por folio y lo mapea a tu modelo
+
     func fetchTicket(folio: String,
-                     session: URLSession = .shared) async throws -> TicketModelApi {
+                     session: URLSession = .shared) async throws -> Ticket {
         let url = API.base.appendingPathComponent("/getTurnos/\(folio)")
         var req = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
         req.httpMethod = "GET"
         req.setValue("application/json", forHTTPHeaderField: "Accept")
-        
+
         let (data, resp) = try await session.data(for: req)
         guard let http = resp as? HTTPURLResponse else { throw APIError.invalidResponse }
-        
+
         if (200..<300).contains(http.statusCode) {
             let dto = try JSONDecoder().decode(TicketDTO.self, from: data)
-            return TicketModelApi(from: dto)
+            return Ticket(
+                numeroDeTurno: dto.numeroDeTurno,
+                nombrePaciente: dto.nombrePaciente,
+                pantallaAnuncioSuperior: dto.turnoActivo ? "¡ES SU TURNO!" : "ESPERE SU VENTANILLA",
+                pantallaVentanilla: dto.pantallaVentanilla ?? 0,
+                turnoActivo: dto.turnoActivo,
+                tiempoRestanteTurno: dto.tiempoRestanteTurno
+            )
         } else {
             if let obj = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                let msg = obj["error"] as? String {
@@ -204,5 +215,7 @@ struct APIClient {
             throw APIError.http(http.statusCode, nil)
         }
     }
+
+    
 }
 

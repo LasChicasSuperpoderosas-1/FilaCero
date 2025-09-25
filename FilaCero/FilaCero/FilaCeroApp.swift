@@ -10,7 +10,6 @@ struct FilaCeroApp: App {
 
     var body: some Scene {
         WindowGroup { LoginView() }
-
     }
 }
 

@@ -11,7 +11,7 @@ class TurnoEspecialViewModel: ObservableObject {
     @Published var listaEspecial: [TurnoEspecial] = []
 
     func obtenerTurnosDesdeAPI() {
-        guard let url = URL(string: "https://a01571609.tc2007b.tec.mx:10204/turnos") else {
+        guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/turnos") else {
             print("URL inválida")
             return
         }

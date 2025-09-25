@@ -18,12 +18,12 @@ struct HistorialResponse: Decodable {
 struct HistorialItemDTO: Decodable {
     let id: Int
     let ventanillaCodigo: Int
-    let folioTurno: String
+    let folioTurno: Int
     let pacienteNombre: String
     let ventanilleroNombre: String
     let sesionEstado: String
     let turnoEstado: String
-    let prioridad: String
+    let prioridad: Bool
     let inicio: Date
     let llamado: Date?
     let fin: Date?
@@ -45,7 +45,7 @@ struct HistorialAPI {
     let baseURL: URL
     let session: URLSession
 
-    init(baseURL: URL = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207")!,
+    init(baseURL: URL = URL(string: "https://a00998753.tc2007b.tec.mx:10203")!,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.session = session
@@ -88,19 +88,27 @@ struct HistorialAPI {
         }
 
         let dec = JSONDecoder()
-        dec.dateDecodingStrategy = .iso8601
+        //dec.dateDecodingStrategy = .iso8601
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        formatter.calendar = Calendar(identifier: .iso8601)
+        formatter.timeZone = TimeZone(secondsFromGMT: 0)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        dec.dateDecodingStrategy = .formatted(formatter)
+
         let payload = try dec.decode(HistorialResponse.self, from: data)
+        //let payload = try dec.decode(HistorialResponse.self, from: data)
 
         return payload.items.map { dto in
             Atencion(
                 id: dto.id,
                 ventanillaCodigo: dto.ventanillaCodigo,
-                folioTurno: dto.folioTurno,
+                folioTurno: "T-\(dto.folioTurno)", // <--- CAMBIO: Convierte el Int a String
                 pacienteNombre: dto.pacienteNombre,
                 ventanilleroNombre: dto.ventanilleroNombre,
                 sesionEstado: SesionEstado(rawValue: dto.sesionEstado) ?? .asignado,
                 turnoEstado: TurnoEstado(rawValue: dto.turnoEstado) ?? .pendiente,
-                prioridad: Prioridad(rawValue: dto.prioridad) ?? .normal,
+                prioridad: dto.prioridad ? .especial : .normal, // <--- CAMBIO: Convierte el Bool al enum
                 inicio: dto.inicio,
                 llamado: dto.llamado,
                 fin: dto.fin

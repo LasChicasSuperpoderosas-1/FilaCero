@@ -1,102 +1,96 @@
-//
-//  TicketScreen.swift
-//  FilaCero
-//
-//  Created by Emilio Puga on 25/09/25.
-//
-
 import SwiftUI
 
-struct TicketScreen: View {
+struct TicketSingleScreen: View {
     let pacienteID: Int
 
-    // Modelo que traes del API
-    @State private var ticketAPI: TicketModelApi?
-    // Modelo que consume TicketView
-    @State private var ticketUI: Ticket?
-    @State private var showTicket = true
-
+    @State private var ticket: Ticket?
     @State private var folio: String = ""
-    @State private var loading = true
+    @State private var loading = false
     @State private var errorMsg: String?
-
-    // Polling cada 5 s
-    @State private var timer = Timer.publish(every: 5, on: .main, in: .common).autoconnect()
+    @State private var showTicket: Bool = true
 
     var body: some View {
-        Group {
-            if let tk = ticketUI, showTicket {
+        VStack(spacing: 20) {
+
+            // 1) Si ya hay ticket → muestra TicketView
+            if let tk = ticket {
                 TicketView(data: tk, showTicket: $showTicket)
-                    .onReceive(timer) { _ in
-                        Task { await refresh() }
+                    .onChange(of: showTicket) { _, new in
+                        // Si el usuario presiona "Cancelar turno", regresa al botón
+                        if new == false {
+                            ticket = nil
+                            folio = ""
+                        }
                     }
-            } else if loading {
-                VStack(spacing: 16) {
-                    ProgressView()
-                    Text("Generando tu turno…")
-                        .font(.headline)
+
+                // Botón opcional para refrescar (GET) manualmente
+                Button("Actualizar estado") {
+                    Task { await doFetch() }
                 }
-            } else if let msg = errorMsg {
-                VStack(spacing: 12) {
-                    Text("Error").font(.headline)
-                    Text(msg).multilineTextAlignment(.center)
-                    Button("Reintentar") { Task { await bootstrap() } }
-                        .buttonStyle(.borderedProminent)
-                }
-                .padding()
+                .buttonStyle(.bordered)
+
             } else {
-                Text("No se encontró ticket")
-                    .foregroundColor(.secondary)
+                // 2) Pantalla inicial simple con botón
+                if loading {
+                    ProgressView("Generando tu turno…")
+                } else if let msg = errorMsg {
+                    VStack(spacing: 10) {
+                        Text("Error").font(.headline)
+                        Text(msg).multilineTextAlignment(.center)
+                        Button("Reintentar") { Task { await doPostThenGet() } }
+                            .buttonStyle(.borderedProminent)
+                    }
+                } else {
+                    Button {
+                        Task { await doPostThenGet() }
+                    } label: {
+                        Text("Generar ticket")
+                            .font(.headline)
+                            .padding(.vertical, 10)
+                            .frame(maxWidth: 240)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
             }
         }
-        .task { await bootstrap() }
-        .onDisappear {
-            timer.upstream.connect().cancel()
-        }
+        .padding()
     }
 
-    // MARK: - Crear ticket (POST)
-    private func bootstrap() async {
+    // MARK: - POST y luego GET
+    private func doPostThenGet() async {
         loading = true
         errorMsg = nil
         do {
-            let apiTicket = try await APIClient.shared.createTicket(pacienteID: pacienteID)
-            self.ticketAPI = apiTicket
-            self.ticketUI  = mapToUI(apiTicket)
-            self.folio     = String(format: "%03d", apiTicket.numeroDeTurno)
+            // POST
+            let creado = try await APIClient.shared.createTicket(pacienteID: pacienteID)
+            // Guarda folio de 3 dígitos para el GET
+            self.folio = String(format: "%03d", creado.numeroDeTurno)
+
+            // GET (inmediato) para imprimir lo más fresco
+            let consultado = try await APIClient.shared.fetchTicket(folio: folio)
+
+            // Mostrar
+            self.ticket = consultado
+            self.showTicket = true
             loading = false
-            await refresh() // primer refresh inmediato
         } catch {
             loading = false
             errorMsg = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
     }
 
-    // MARK: - Refrescar estado (GET por folio)
-    @MainActor
-    private func refresh() async {
+    // MARK: - Solo GET (actualización manual)
+    private func doFetch() async {
         guard !folio.isEmpty else { return }
         do {
-            let updated = try await APIClient.shared.fetchTicket(folio: folio)
-            self.ticketAPI = updated
-            self.ticketUI  = mapToUI(updated)
+            let consultado = try await APIClient.shared.fetchTicket(folio: folio)
+            self.ticket = consultado
         } catch {
-            // silencio el error de poll para no romper UI
+            errorMsg = (error as? LocalizedError)?.errorDescription ?? error.localizedDescription
         }
-    }
-
-    // MARK: - Mapper: TicketModelApi -> Ticket (modelo que usa TicketView)
-    private func mapToUI(_ dto: TicketModelApi) -> Ticket {
-        Ticket(
-            numeroDeTurno: dto.numeroDeTurno,
-            nombrePaciente: dto.nombrePaciente, pantallaAnuncioSuperior: "String",
-            pantallaVentanilla: dto.pantallaVentanilla,
-            turnoActivo: dto.turnoActivo,
-            tiempoRestanteTurno: dto.tiempoRestanteTurno
-        )
     }
 }
 
 #Preview {
-    TicketScreen(pacienteID: 21)
+    TicketSingleScreen(pacienteID: 1) // usa un id_usuario ACTIVO de tu BD
 }

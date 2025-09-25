@@ -22,7 +22,12 @@ struct SiguienteTurnoView: View {
             
             if (appearTimer == false){
                 VStack (spacing: geometry.size.height * 0.02){
-                  
+                    Image("LogoNova")
+                        .resizable(resizingMode: .stretch)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: geometry.size.width * 0.30)
+                    
+
                     VStack(alignment: .leading){
                         Text("Bienvenido, ")
                             .font(.system(size:geometry.size.width * 0.05))

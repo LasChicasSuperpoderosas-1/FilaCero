@@ -8,7 +8,7 @@
 import Foundation
 
 struct VentanillasAPI {
-    // ⚠️ Cambia por tu URL real
+    
     static let baseURL = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/ventanillas")!
 
     static func fetchAll() async throws -> [Ventanilla] {

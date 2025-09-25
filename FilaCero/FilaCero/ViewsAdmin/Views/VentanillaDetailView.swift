@@ -31,7 +31,7 @@ struct VentanillaDetailView: View {
                 }
 
                 NavigationLink {
-                    HistorialView()
+                    HistorialView(initialVentanilla: ventanillaId)
                 } label: {
                     VentInfoRow(
                         icon: "clock.arrow.circlepath",

@@ -12,9 +12,8 @@ struct DashboardView: View {
     @StateObject private var vm = DashboardViewModel()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
-                // ventanilleros
                 Section(header: Text("Top 5 ventanilleros por turnos atendidos")) {
                     if vm.ventanilleros.isEmpty {
                         Text("Cargando ventanilleros...")
@@ -31,8 +30,6 @@ struct DashboardView: View {
                     }
                 }
 
-                
-                // Eficiencia
                 Section(header: Text("Turnos atendidos por ventanilla")) {
                     if vm.eficiencias.isEmpty {
                         Text("Cargando eficiencia...")
@@ -73,6 +70,7 @@ struct DashboardView: View {
 
             }
             .navigationTitle("Estadísticas")
+            .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
             vm.cargarDatosDashboard()

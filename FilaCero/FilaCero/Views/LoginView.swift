@@ -5,8 +5,6 @@
 //  Created by Alumno on 26/08/25.
 //
 
-//VISTA PARA PACIENTE, VENTANILLERO, Y ADMINISTRADOR
-
 import SwiftUI
 
 struct LoginView: View {
@@ -50,7 +48,6 @@ struct LoginView: View {
             }
             .padding(.bottom, 10)
 
-            // Password
             Group {
                 Text("Contraseña")
                     .foregroundStyle(Color(red:102/255, green:102/255, blue:102/255))
@@ -70,7 +67,6 @@ struct LoginView: View {
                     .frame(width: 360)
             }
 
-            // Botón
             Button {
                 Task {
                     await auth.login(email: email, password: password)
@@ -119,16 +115,13 @@ struct LoginView: View {
                 }
             }
         }
-        // Muestra pop-up cuando haya error
         .alert("Credenciales inválidas", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) {
-                // opcional: limpiar mensaje después
                 auth.errorMessage = nil
             }
         } message: {
             Text(auth.errorMessage ?? "Revisa tu correo y contraseña.")
         }
-        // Dispara el alert automáticamente al cambiar el mensaje
         .onChange(of: auth.errorMessage) { msg in
             if msg != nil { showErrorAlert = true }
         }

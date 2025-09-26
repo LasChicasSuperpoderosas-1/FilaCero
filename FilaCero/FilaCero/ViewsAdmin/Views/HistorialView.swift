@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-// MARK: - Colores fijos
 extension Color {
     static let fcGreen  = Color.green
     static let fcOrange = Color.orange
@@ -18,7 +17,6 @@ extension Color {
     static let fcTeal   = Color.teal
 }
 
-// MARK: - Modelos (según DDL)
 enum SesionEstado: String, CaseIterable, Identifiable {
     case terminado = "TERMINADO"
     case asignado  = "ASIGNADO"
@@ -59,7 +57,6 @@ struct Atencion: Identifiable, Equatable {
     var servicioSeg: Int? { guard let llamado, let fin else { return nil }; return Int(fin.timeIntervalSince(llamado)) }
 }
 
-// MARK: - ViewModel
 final class HistorialVentanillasVM: ObservableObject {
     @Published var items: [Atencion] = []
     @Published var filtered: [Atencion] = []
@@ -135,7 +132,6 @@ final class HistorialVentanillasVM: ObservableObject {
         filtered = data.sorted { $0.inicio > $1.inicio }
     }
 
-    // KPIs
     var totalAtenciones: Int { filtered.count }
     var servicioPromMin: Int {
         let d = filtered.compactMap { $0.servicioSeg }.map(Double.init)
@@ -149,7 +145,6 @@ final class HistorialVentanillasVM: ObservableObject {
     }
 }
 
-// MARK: - Vista principal
 struct HistorialView: View {
     @StateObject private var vm = HistorialVentanillasVM()
     @State private var showFilters = false
@@ -194,13 +189,12 @@ struct HistorialView: View {
             }
             .sheet(isPresented: $showFilters) { FiltrosSheet(vm: vm) }
             .searchable(text: $vm.searchText, placement: .navigationBarDrawer(displayMode: .always), prompt: "Folio, paciente o ventanillero")
-            .onChange(of: vm.searchText) { _ in vm.applyFilters() }
+            .onChange(of: vm.searchText) { _,_ in vm.applyFilters() }
             .refreshable { await vm.refresh() }
         }
     }
 }
 
-// MARK: - Row
 struct AtencionRow: View {
     let item: Atencion
 
@@ -245,7 +239,6 @@ struct AtencionRow: View {
     }
 }
 
-// MARK: - Chips y KPIs
 struct TagChip: View {
     let text: String
     let color: Color
@@ -296,7 +289,6 @@ struct KPI: View {
     }
 }
 
-// MARK: - Empty/Error
 struct EmptyStateView: View {
     let text: String
     var body: some View {
@@ -322,7 +314,6 @@ struct ErrorStateView: View {
     }
 }
 
-// MARK: - Utils
 private func daySections(_ items: [Atencion]) -> [(Date, [Atencion])] {
     let cal = Calendar.current
     let groups = Dictionary(grouping: items) { at in cal.startOfDay(for: at.inicio) }
@@ -330,7 +321,6 @@ private func daySections(_ items: [Atencion]) -> [(Date, [Atencion])] {
     return keys.map { day in (day, groups[day]!.sorted { $0.inicio > $1.inicio }) }
 }
 
-// MARK: - Filtros Sheet
 struct FiltrosSheet: View {
     @ObservedObject var vm: HistorialVentanillasVM
     @Environment(\.dismiss) private var dismiss
@@ -398,7 +388,6 @@ struct FiltrosSheet: View {
     }
 }
 
-// MARK: - Preview
 struct HistorialVentanillasView_Previews: PreviewProvider {
     static var previews: some View { HistorialView() }
 }

@@ -5,7 +5,7 @@ struct VentanillaDetailView: View {
     let ventanillaId: Int
     let initialEnabled: Bool
 
-    @Environment(\.dismiss) private var dismiss   // 👈 para cerrar la vista
+    @Environment(\.dismiss) private var dismiss 
 
     var body: some View {
         ScrollView {

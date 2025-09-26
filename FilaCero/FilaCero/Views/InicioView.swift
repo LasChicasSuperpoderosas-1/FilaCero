@@ -10,13 +10,14 @@
 import SwiftUI
 
 struct InicioView: View {
+    @EnvironmentObject var auth: AuthVM
     var onGenerateTurn: () -> Void = {}
     var onSignOut: () -> Void = {}
     var patientName: String = "Pablo Emilio González"
 
     @State private var appeared = false
-    @State public var showTicket = false // Variable para cambiar al ticket
-    @Binding public var isSignedIn: Bool // Variable de Binding con showMain
+    @State public var showTicket = false
+    @State private var confirmLogout = false
     
 
     var body: some View {
@@ -149,7 +150,7 @@ struct InicioView: View {
             Spacer()
 
             Button(action: {
-                isSignedIn = false // Variable para regresar al login con el showMain
+                confirmLogout = true
             }) {
                 HStack(spacing: 6) {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -176,13 +177,20 @@ struct InicioView: View {
         .onAppear { appeared = true }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .confirmationDialog("¿Cerrar sesión?", isPresented: $confirmLogout) {
+                    Button("Cerrar sesión", role: .destructive) {
+                        Task { await auth.logout() }
+                    }
+                    Button("Cancelar", role: .cancel) {}
+                }
     }
+        
 }
 
 #Preview("Inicio") {
     InicioView(
         onGenerateTurn: { print("Preview: turno generado") },
         onSignOut: { print("Preview: cerrar sesión") },
-        isSignedIn: .constant(false), // Aqui pasa el binding
     )
+    .environmentObject(AuthVM())
 }

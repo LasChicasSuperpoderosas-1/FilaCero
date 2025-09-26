@@ -1,15 +1,20 @@
 //
-//  PerfilView.swift
+//  PerfilVentanilleroView.swift
 //  FilaCero
 //
-//  Created by Alumno on 23/09/25.
+//  Created by Diego Saldaña on 26/09/25.
 //
 
 import SwiftUI
 
-struct PerfilView: View {
+struct PerfilVentanilleroView: View {
     @EnvironmentObject var auth: AuthVM
     @State private var confirm = false
+
+        // Hardcode de ejemplo; cámbialos cuando conectes API
+        let nombre = "Juan Pérez"
+        let correo = "ventanillero@ejemplo.com"
+        let ventanillaCodigo = 2
 
         var body: some View {
             NavigationStack {
@@ -19,16 +24,20 @@ struct PerfilView: View {
                             Image(systemName: "person.crop.circle.fill")
                                 .resizable().frame(width: 64, height: 64)
                             VStack(alignment: .leading, spacing: 4) {
-                                Text("Pablo Emilio González").font(.title3).bold()
-                                Text("Administrador").foregroundStyle(.secondary)
+                                Text(nombre).font(.title3).bold()
+                                Text("Ventanillero").foregroundStyle(.secondary)
                             }
                         }.padding(.vertical, 4)
                     }
 
                     Section("Cuenta") {
-                        ProfileRow(label: "Correo", value: "admin@ejemplo.com")
+                        ProfileRow(label: "Correo", value: correo)
                         ProfileRow(label: "ID Usuario", value: "\(auth.userId ?? 0)")
-                        ProfileRow(label: "Rol", value: (auth.rol ?? "ADMIN"))
+                        ProfileRow(label: "Rol", value: (auth.rol ?? "VENTANILLERO"))
+                    }
+
+                    Section("Mi ventanilla") {
+                        ProfileRow(label: "Número de Ventanilla", value: "\(ventanillaCodigo)")
                     }
 
                     Section {
@@ -63,5 +72,5 @@ private struct ProfileRow: View {
 }
 
 #Preview {
-    PerfilView()
+    PerfilVentanilleroView()
 }

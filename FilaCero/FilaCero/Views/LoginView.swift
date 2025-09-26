@@ -10,12 +10,11 @@
 import SwiftUI
 
 struct LoginView: View {
-
+    @EnvironmentObject var auth: AuthVM
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showMain = false
     @State private var showErrorAlert = false
-    @StateObject private var auth = AuthVM()
 
     var body: some View {
         VStack {
@@ -103,37 +102,18 @@ struct LoginView: View {
             .padding(.top, 20)
             .disabled(email.isEmpty || password.isEmpty || auth.isLoading)
         }
-        .fullScreenCover(isPresented: $showMain) {
-            NavigationStack {
-                switch auth.rol {
-                case "ADMIN":
-                    AdminHomeView()
-                case "VENTANILLERO":
-
-                    TabViewVentanilleroView()                   
-
-                case "PACIENTE":
-                    InicioView(isSignedIn: $showMain)
-                default:
-                    InicioView(isSignedIn: $showMain)
-                }
-            }
-        }
-        // Muestra pop-up cuando haya error
         .alert("Credenciales inválidas", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) {
-                // opcional: limpiar mensaje después
                 auth.errorMessage = nil
             }
         } message: {
             Text(auth.errorMessage ?? "Revisa tu correo y contraseña.")
         }
-        // Dispara el alert automáticamente al cambiar el mensaje
         .onChange(of: auth.errorMessage) { msg in
             if msg != nil { showErrorAlert = true }
         }
     }
 }
 
-#Preview { LoginView() }
+#Preview { LoginView().environmentObject(AuthVM())  }
 

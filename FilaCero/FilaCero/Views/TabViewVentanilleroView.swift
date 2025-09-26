@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct TabViewVentanilleroView: View {
+    @EnvironmentObject var auth: AuthVM
     var body: some View {
         TabView{
             SiguienteTurnoView()
@@ -15,11 +16,12 @@ struct TabViewVentanilleroView: View {
                     Image(systemName: "house")
                     Text("Ventanilla")
                 }
-            LoginView()
+            PerfilVentanilleroView()
                 .tabItem {
-                    Image(systemName: "questionmark.circle")
-                    Text("Recomendación")
+                    Image(systemName: "person.crop.circle")
+                    Text("Perfil")
                 }
+                .environmentObject(auth)
         }.tabViewStyle(DefaultTabViewStyle())
             .tint(Brand.primary)
         

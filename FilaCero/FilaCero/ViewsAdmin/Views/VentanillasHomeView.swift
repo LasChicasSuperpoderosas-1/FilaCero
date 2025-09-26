@@ -19,7 +19,7 @@ struct VentanillasHomeView: View {
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 212)
                     Text("Sistema de Ventanillas")
-                        .foregroundStyle(Color(red:102/255, green: 102/255, blue: 102/255)) //Hex: #666666
+                        .foregroundStyle(Color(red:102/255, green: 102/255, blue: 102/255))
                         .bold()
                         .font(.system(size:20))
                         .padding(.bottom, 40)

@@ -14,6 +14,7 @@ struct LoginView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showMain = false
+    @State private var showErrorAlert = false
     @StateObject private var auth = AuthVM()
 
     var body: some View {
@@ -27,8 +28,7 @@ struct LoginView: View {
                 .bold()
                 .font(.system(size:20))
                 .padding(.bottom, 40)
-
-            // Correo
+            
             Group {
                 Text("Correo electrónico")
                     .foregroundStyle(Color(red:102/255, green:102/255, blue:102/255))
@@ -37,7 +37,7 @@ struct LoginView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 24)
 
-                TextField("Ejemplo@ternium.com", text: $email)
+                TextField("Ingresa tu correo electrónico", text: $email)
                     .textInputAutocapitalization(.never)
                     .keyboardType(.emailAddress)
                     .autocorrectionDisabled()
@@ -70,19 +70,15 @@ struct LoginView: View {
                     .frame(width: 360)
             }
 
-            // Mensaje de error
-            if let msg = auth.errorMessage {
-                Text(msg).foregroundStyle(.red).font(.footnote).padding(.top, 6)
-            }
-
             // Botón
             Button {
                 Task {
                     await auth.login(email: email, password: password)
                     if auth.isAuthenticated {
-                        // limpiar password de memoria
                         password.removeAll()
                         showMain = true
+                    } else if auth.errorMessage != nil {
+                        showErrorAlert = true
                     }
                 }
             } label: {
@@ -111,15 +107,30 @@ struct LoginView: View {
             NavigationStack {
                 switch auth.rol {
                 case "ADMIN":
-                    AdminHomeView()                          // 👈 tu TabView de admin
+                    AdminHomeView()
                 case "VENTANILLERO":
-                    TabViewVentanilleroView()                   // 👈 la que corresponda
+
+                    TabViewVentanilleroView()                   
+
                 case "PACIENTE":
-                    EncuestaView()
+                    InicioView(isSignedIn: $showMain)
                 default:
-                    InicioView(isSignedIn: $showMain)        // fallback (o muestra error)
+                    InicioView(isSignedIn: $showMain)
                 }
             }
+        }
+        // Muestra pop-up cuando haya error
+        .alert("Credenciales inválidas", isPresented: $showErrorAlert) {
+            Button("OK", role: .cancel) {
+                // opcional: limpiar mensaje después
+                auth.errorMessage = nil
+            }
+        } message: {
+            Text(auth.errorMessage ?? "Revisa tu correo y contraseña.")
+        }
+        // Dispara el alert automáticamente al cambiar el mensaje
+        .onChange(of: auth.errorMessage) { msg in
+            if msg != nil { showErrorAlert = true }
         }
     }
 }

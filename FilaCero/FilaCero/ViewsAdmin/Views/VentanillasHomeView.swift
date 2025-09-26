@@ -30,18 +30,23 @@ struct VentanillasHomeView: View {
 
                     ForEach(vm.ventanillas) { v in
                         NavigationLink {
-                            VentanillaDetailView(titulo: v.titulo)
+                            VentanillaDetailView(titulo: v.titulo, ventanillaId: v.id,initialEnabled: v.activa)
                         } label: {
                             VentanillaRowCard(ventanilla: v)
                         }
+                        .navigationBarTitle("Volver")
+                        .toolbar(.hidden)
+
                     }
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
+                
+                
             }
-            .navigationTitle("") // opcional
-            .toolbar(.hidden, for: .navigationBar) // si quieres el look limpio
-            .refreshable { await vm.load() }   // pull to refresh
+            
+            .toolbar(.hidden, for: .navigationBar)
+            .refreshable { await vm.load() }
             .task { await vm.load() }
         }
     }

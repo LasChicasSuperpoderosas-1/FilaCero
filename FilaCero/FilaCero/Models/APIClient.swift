@@ -28,6 +28,10 @@ enum APIError: LocalizedError {
 }
 
 
+private struct LogoutRequest: Encodable {
+    let id_usuario: Int
+}
+
 
 struct APIClient {
     static let shared = APIClient()
@@ -89,6 +93,22 @@ struct APIClient {
             throw APIError.http(http.statusCode, nil)
         }
     }
+    
+    //--------- Logout -----------
+    func logout(userId: Int, session: URLSession = .shared) async throws {
+            let url = API.base.appendingPathComponent("/auth/logout")
+            var req = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 15)
+            req.httpMethod = "POST"
+            req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            req.setValue("application/json", forHTTPHeaderField: "Accept")
+
+            let body = LogoutRequest(id_usuario: userId)
+            req.httpBody = try JSONEncoder().encode(body)
+
+            let (_, resp) = try await session.data(for: req)
+            guard let http = resp as? HTTPURLResponse else { throw APIError.invalidResponse }
+            guard http.statusCode == 204 else { throw APIError.http(http.statusCode, nil) }
+        }
     
     // ---------- HorarioAdmin ----------
     func programarCierre(ventanillaID: Int,

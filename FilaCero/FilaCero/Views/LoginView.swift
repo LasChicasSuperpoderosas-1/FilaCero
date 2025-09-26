@@ -10,12 +10,11 @@
 import SwiftUI
 
 struct LoginView: View {
-
+    @EnvironmentObject var auth: AuthVM
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showMain = false
     @State private var showErrorAlert = false
-    @StateObject private var auth = AuthVM()
 
     var body: some View {
         VStack {
@@ -107,13 +106,19 @@ struct LoginView: View {
             NavigationStack {
                 switch auth.rol {
                 case "ADMIN":
-                    AdminHomeView()
+                    AdminHomeView().environmentObject(auth)
                 case "VENTANILLERO":
+<<<<<<< Updated upstream
                     VentanillaPrueba()
                 case "PACIENTE":
                     EncuestaView()
+=======
+                    TabViewVentanilleroView().environmentObject(auth)
+                case "PACIENTE":
+                    InicioView().environmentObject(auth)
+>>>>>>> Stashed changes
                 default:
-                    InicioView(isSignedIn: $showMain)
+                    InicioView().environmentObject(auth)
                 }
             }
         }
@@ -133,5 +138,5 @@ struct LoginView: View {
     }
 }
 
-#Preview { LoginView() }
+#Preview { LoginView().environmentObject(AuthVM())  }
 

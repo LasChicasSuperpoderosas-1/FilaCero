@@ -153,3 +153,7 @@ struct SiguienteTurnoView: View {
         }
     }
 }
+
+#Preview {
+    SiguienteTurnoView()
+}

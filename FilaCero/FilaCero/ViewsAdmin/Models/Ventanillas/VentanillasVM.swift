@@ -16,7 +16,6 @@ final class VentanillasVM: ObservableObject {
     private var currentTask: Task<Void, Never>?
 
     func load(activas: Bool? = nil) {
-        // cancela la request anterior si sigue viva
         currentTask?.cancel()
 
         isLoading = true
@@ -25,11 +24,9 @@ final class VentanillasVM: ObservableObject {
         currentTask = Task {
             do {
                 let items = try await APIClient.shared.fetchVentanillas(activas: activas)
-                // si la tarea fue cancelada en medio, no toques estado
                 if Task.isCancelled { return }
                 self.ventanillas = items
             } catch {
-                // si fue cancelación (-999), no muestres error
                 if let urlErr = error as? URLError, urlErr.code == .cancelled { return }
                 self.errorMessage = error.localizedDescription
             }

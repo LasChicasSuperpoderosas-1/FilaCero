@@ -33,7 +33,7 @@ struct AdminHomeView: View {
 
             NavigationStack {
                 DashboardView()
-                    .navigationTitle("Estadísticas")
+                    .navigationTitle("Estadoísticas")
                     .navigationBarTitleDisplayMode(.inline)
             }
             .tabItem {
@@ -43,8 +43,6 @@ struct AdminHomeView: View {
             
             NavigationStack {
                 TurnoEspecialView()
-                    .navigationTitle("Turno Especial")
-                    .navigationBarTitleDisplayMode(.inline)
             }
             .tabItem {
                 Label("Turno Especial", systemImage: "list.bullet.rectangle.fill")

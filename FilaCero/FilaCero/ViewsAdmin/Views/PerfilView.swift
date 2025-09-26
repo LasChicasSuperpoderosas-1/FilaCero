@@ -40,6 +40,7 @@ struct PerfilView: View {
                     }
                 }
                 .navigationTitle("Perfil")
+                .navigationBarTitleDisplayMode(.large)
                 .confirmationDialog("¿Cerrar sesión?", isPresented: $confirm) {
                     Button("Cerrar sesión", role: .destructive) {
                         Task { await auth.logout() }

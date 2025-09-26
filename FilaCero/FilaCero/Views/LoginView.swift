@@ -113,7 +113,7 @@ struct LoginView: View {
                 case "ADMIN":
                     AdminHomeView()                          // 👈 tu TabView de admin
                 case "VENTANILLERO":
-                    VentanillaPrueba()                   // 👈 la que corresponda
+                    TabViewVentanilleroView()                   // 👈 la que corresponda
                 case "PACIENTE":
                     EncuestaView()
                 default:

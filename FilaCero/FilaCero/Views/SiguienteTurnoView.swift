@@ -3,7 +3,7 @@ import SwiftUI
 struct SiguienteTurnoView: View {
     let usuarioId: Int = 21
 
-    var nombreVentanillero: String = "Juan Pérez"
+    var nombreVentanillero: String = "Karla Esquivel"
     var nombrePaciente: String = "Pepe papa"
 
     @State var showAlert = false

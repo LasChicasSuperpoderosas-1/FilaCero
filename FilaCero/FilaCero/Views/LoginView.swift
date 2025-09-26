@@ -109,7 +109,9 @@ struct LoginView: View {
                 case "ADMIN":
                     AdminHomeView()
                 case "VENTANILLERO":
-                    VentanillaPrueba()
+
+                    TabViewVentanilleroView()                   
+
                 case "PACIENTE":
                     InicioView(isSignedIn: $showMain)
                 default:

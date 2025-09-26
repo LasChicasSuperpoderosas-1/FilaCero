@@ -31,5 +31,22 @@ final class AuthVM: ObservableObject {
         }
         isLoading = false
     }
+    
+    // ---------- LOGOUT ----------
+        func logout() async {
+            guard let uid = userId else {
+                // no hay sesión activa
+                self.isAuthenticated = false
+                return
+            }
+            do {
+                try await APIClient.shared.logout(userId: uid)
+            } catch {
+                print("⚠️ Error en logout:", error.localizedDescription)
+            }
+            self.isAuthenticated = false
+            self.userId = nil
+            self.rol = nil
+        }
 }
 

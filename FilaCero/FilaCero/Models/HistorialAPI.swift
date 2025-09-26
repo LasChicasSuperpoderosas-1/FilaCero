@@ -88,7 +88,6 @@ struct HistorialAPI {
         }
 
         let dec = JSONDecoder()
-        //dec.dateDecodingStrategy = .iso8601
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         formatter.calendar = Calendar(identifier: .iso8601)
@@ -97,18 +96,17 @@ struct HistorialAPI {
         dec.dateDecodingStrategy = .formatted(formatter)
 
         let payload = try dec.decode(HistorialResponse.self, from: data)
-        //let payload = try dec.decode(HistorialResponse.self, from: data)
 
         return payload.items.map { dto in
             Atencion(
                 id: dto.id,
                 ventanillaCodigo: dto.ventanillaCodigo,
-                folioTurno: "T-\(dto.folioTurno)", // <--- CAMBIO: Convierte el Int a String
+                folioTurno: "T-\(dto.folioTurno)",
                 pacienteNombre: dto.pacienteNombre,
                 ventanilleroNombre: dto.ventanilleroNombre,
                 sesionEstado: SesionEstado(rawValue: dto.sesionEstado) ?? .asignado,
                 turnoEstado: TurnoEstado(rawValue: dto.turnoEstado) ?? .pendiente,
-                prioridad: dto.prioridad ? .especial : .normal, // <--- CAMBIO: Convierte el Bool al enum
+                prioridad: dto.prioridad ? .especial : .normal, 
                 inicio: dto.inicio,
                 llamado: dto.llamado,
                 fin: dto.fin

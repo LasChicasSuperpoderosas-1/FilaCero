@@ -5,15 +5,16 @@
 //  Created by Alumno on 26/08/25.
 //
 
+//VISTA PARA PACIENTE, VENTANILLERO, Y ADMINISTRADOR
+
 import SwiftUI
 
 struct LoginView: View {
-
+    @EnvironmentObject var auth: AuthVM
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var showMain = false
     @State private var showErrorAlert = false
-    @StateObject private var auth = AuthVM()
 
     var body: some View {
         VStack {
@@ -48,6 +49,7 @@ struct LoginView: View {
             }
             .padding(.bottom, 10)
 
+            // Password
             Group {
                 Text("Contraseña")
                     .foregroundStyle(Color(red:102/255, green:102/255, blue:102/255))
@@ -67,6 +69,7 @@ struct LoginView: View {
                     .frame(width: 360)
             }
 
+            // Botón
             Button {
                 Task {
                     await auth.login(email: email, password: password)
@@ -103,30 +106,37 @@ struct LoginView: View {
             NavigationStack {
                 switch auth.rol {
                 case "ADMIN":
-                    AdminHomeView()
+                    AdminHomeView().environmentObject(auth)
                 case "VENTANILLERO":
-
-                    TabViewVentanilleroView()                   
-
+<<<<<<< Updated upstream
+                    VentanillaPrueba()
                 case "PACIENTE":
-                    InicioView(isSignedIn: $showMain)
+                    EncuestaView()
+=======
+                    TabViewVentanilleroView().environmentObject(auth)
+                case "PACIENTE":
+                    InicioView().environmentObject(auth)
+>>>>>>> Stashed changes
                 default:
-                    InicioView(isSignedIn: $showMain)
+                    InicioView().environmentObject(auth)
                 }
             }
         }
+        // Muestra pop-up cuando haya error
         .alert("Credenciales inválidas", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) {
+                // opcional: limpiar mensaje después
                 auth.errorMessage = nil
             }
         } message: {
             Text(auth.errorMessage ?? "Revisa tu correo y contraseña.")
         }
+        // Dispara el alert automáticamente al cambiar el mensaje
         .onChange(of: auth.errorMessage) { msg in
             if msg != nil { showErrorAlert = true }
         }
     }
 }
 
-#Preview { LoginView() }
+#Preview { LoginView().environmentObject(AuthVM())  }
 

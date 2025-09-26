@@ -16,7 +16,8 @@ struct InicioView: View {
     var patientName: String = "Pablo Emilio González"
 
     @State private var appeared = false
-    @State public var showTicket = false // Variable para cambiar al ticket
+    @State public var showTicket = false
+    @State private var confirmLogout = false
     
 
     var body: some View {
@@ -149,9 +150,7 @@ struct InicioView: View {
             Spacer()
 
             Button(action: {
-                Task{
-                    await auth.logout()
-                }
+                confirmLogout = true
             }) {
                 HStack(spacing: 6) {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
@@ -178,7 +177,14 @@ struct InicioView: View {
         .onAppear { appeared = true }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
+        .confirmationDialog("¿Cerrar sesión?", isPresented: $confirmLogout) {
+                    Button("Cerrar sesión", role: .destructive) {
+                        Task { await auth.logout() }
+                    }
+                    Button("Cancelar", role: .cancel) {}
+                }
     }
+        
 }
 
 #Preview("Inicio") {

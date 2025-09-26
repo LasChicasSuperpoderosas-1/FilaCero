@@ -102,36 +102,13 @@ struct LoginView: View {
             .padding(.top, 20)
             .disabled(email.isEmpty || password.isEmpty || auth.isLoading)
         }
-        .fullScreenCover(isPresented: $showMain) {
-            NavigationStack {
-                switch auth.rol {
-                case "ADMIN":
-                    AdminHomeView().environmentObject(auth)
-                case "VENTANILLERO":
-<<<<<<< Updated upstream
-                    VentanillaPrueba()
-                case "PACIENTE":
-                    EncuestaView()
-=======
-                    TabViewVentanilleroView().environmentObject(auth)
-                case "PACIENTE":
-                    InicioView().environmentObject(auth)
->>>>>>> Stashed changes
-                default:
-                    InicioView().environmentObject(auth)
-                }
-            }
-        }
-        // Muestra pop-up cuando haya error
         .alert("Credenciales inválidas", isPresented: $showErrorAlert) {
             Button("OK", role: .cancel) {
-                // opcional: limpiar mensaje después
                 auth.errorMessage = nil
             }
         } message: {
             Text(auth.errorMessage ?? "Revisa tu correo y contraseña.")
         }
-        // Dispara el alert automáticamente al cambiar el mensaje
         .onChange(of: auth.errorMessage) { msg in
             if msg != nil { showErrorAlert = true }
         }

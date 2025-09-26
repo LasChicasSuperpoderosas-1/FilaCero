@@ -15,6 +15,7 @@ enum AdminTab: Hashable {
 }
 
 struct AdminHomeView: View {
+    @EnvironmentObject var auth: AuthVM
     @State private var selection: AdminTab = .ventanillas
 
     var body: some View {
@@ -39,16 +40,6 @@ struct AdminHomeView: View {
                 Label("Estadísticas", systemImage: "chart.bar.xaxis")
             }
             .tag(AdminTab.estadisticas)
-
-            NavigationStack {
-                PerfilView()
-                    .navigationTitle("Perfil")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
-            .tabItem {
-                Label("Perfil", systemImage: "person.crop.circle")
-            }
-            .tag(AdminTab.perfil)
             
             NavigationStack {
                 TurnoEspecialView()
@@ -59,6 +50,18 @@ struct AdminHomeView: View {
                 Label("Turno Especial", systemImage: "list.bullet.rectangle.fill")
             }
             .tag(AdminTab.turno_especial)
+
+            NavigationStack {
+                PerfilView()
+                    .navigationTitle("Perfil")
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+            .tabItem {
+                Label("Perfil", systemImage: "person.crop.circle")
+            }
+            .tag(AdminTab.perfil)
+            .environmentObject(auth)
+            
         }
     }
 }

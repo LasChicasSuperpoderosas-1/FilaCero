@@ -9,43 +9,60 @@ import Foundation
 
 class TurnoEspecialViewModel: ObservableObject {
     @Published var listaEspecial: [TurnoEspecial] = []
+    @Published var errorMessage: String? = nil   // 👈 nuevo estado de error
 
     func obtenerTurnosDesdeAPI() {
         guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/turnos") else {
-            print("URL inválida")
+            DispatchQueue.main.async {
+                self.errorMessage = "URL inválida"
+                self.listaEspecial = []
+            }
             return
         }
 
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
-                print("Error en la llamada: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    self.errorMessage = "Error al conectar con el servidor: \(error.localizedDescription)"
+                    self.listaEspecial = []
+                }
                 return
             }
 
             guard let data = data else {
-                print("No se recibieron datos")
+                DispatchQueue.main.async {
+                    self.errorMessage = "No se recibieron datos"
+                    self.listaEspecial = []
+                }
                 return
             }
 
             do {
                 let decodedResponse = try JSONDecoder().decode(TurnosResponse.self, from: data)
                 DispatchQueue.main.async {
-                    self.listaEspecial = decodedResponse.turnos.map {
-                        TurnoEspecial(
-                            id: $0.folio_turno,
-                            nombre: $0.nombre_completo,
-                            estado: $0.estado,
-                            prioridad: $0.prioridad
-                        )
+                    if decodedResponse.ok {
+                        self.listaEspecial = decodedResponse.turnos.map {
+                            TurnoEspecial(
+                                id: $0.folio_turno,
+                                nombre: $0.nombre_completo,
+                                estado: $0.estado,
+                                prioridad: $0.prioridad
+                            )
+                        }
+                        self.errorMessage = nil // ✅ sin errores
+                    } else {
+                        self.listaEspecial = []
+                        self.errorMessage = "Lista no cargada"
                     }
                 }
             } catch {
-                print("Error de decodificación: \(error)")
+                DispatchQueue.main.async {
+                    self.errorMessage = "Error de decodificación"
+                    self.listaEspecial = []
+                }
             }
         }
 
         task.resume()
     }
 }
-
-

@@ -9,7 +9,7 @@ import Foundation
 
 class TurnoEspecialViewModel: ObservableObject {
     @Published var listaEspecial: [TurnoEspecial] = []
-    @Published var errorMessage: String? = nil   // 👈 nuevo estado de error
+    @Published var errorMessage: String? = nil
 
     func obtenerTurnosDesdeAPI() {
         guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/turnos") else {
@@ -49,7 +49,7 @@ class TurnoEspecialViewModel: ObservableObject {
                                 prioridad: $0.prioridad
                             )
                         }
-                        self.errorMessage = nil // ✅ sin errores
+                        self.errorMessage = nil
                     } else {
                         self.listaEspecial = []
                         self.errorMessage = "Lista no cargada"

@@ -6,9 +6,8 @@
 //
 
 import Foundation
-
 class PrioridadViewModel: ObservableObject {
-    func asignarTurnoEspecial(nombrePaciente: String, completion: @escaping (Bool) -> Void) {
+    func asignarTurnoEspecial(nombrePaciente: String, folioTurno: Int, completion: @escaping (Bool) -> Void) {
         guard let url = URL(string: "https://las-chicas-superpoderosas.tc2007b.tec.mx:10207/turnos/turno_especial") else {
             print("URL inválida")
             completion(false)
@@ -19,7 +18,10 @@ class PrioridadViewModel: ObservableObject {
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        let body: [String: String] = ["nombre_paciente": nombrePaciente]
+        let body: [String: Any] = [
+            "nombre_paciente": nombrePaciente,
+            "folio_turno": folioTurno
+        ]
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
@@ -51,5 +53,3 @@ class PrioridadViewModel: ObservableObject {
         task.resume()
     }
 }
-
-
